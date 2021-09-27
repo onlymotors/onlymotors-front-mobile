@@ -10,6 +10,7 @@ import Login from './screens/Login';
 import AlterarSenha from './screens/AlterarSenha';
 import CadastroUsuario from './screens/CadastroUsuario';
 import PainelUsuario from './screens/PainelUsuario';
+import PainelAnuncios from './screens/PainelAnuncios';
 import BarraNavegacao from './components/BarraNavegacao';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -34,8 +35,8 @@ const Routes = () => {
       >
         <Drawer.Screen name="Only Motors" component={Home} options={drawerOptions} initialParams={{ mensagem: "", visibilidade: false }}/>
         <Drawer.Screen name="Login" component={Login} options={drawerOptions}/>
-        <Drawer.Screen name="Painel de Anúncios" component={Home} options={drawerOptions}/>
-        <Drawer.Screen name="Chat" component={Home} options={drawerOptions}/>
+        <Drawer.Screen name="Painel de Anúncios" component={PainelAnuncios} options={drawerOptions}/>
+        <Drawer.Screen name="Chat" component={Login} options={drawerOptions}/>
         <Drawer.Screen name="Inserir Anúncio" component={InserirAnuncio} options={drawerOptions}/>
         <Drawer.Screen name="Anúncio" component={Anuncio} options={drawerOptions}/>
         <Drawer.Screen name="Progresso de Upload" component={ProgressoUpload} options={drawerOptions}/>

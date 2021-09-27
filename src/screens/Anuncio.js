@@ -8,25 +8,20 @@ const Anuncio = ({ route, navigation }) => {
 
   const { itemId } = route.params;
   const [anuncio, setAnuncio] = useState({
-    cod_user: 1234,
-    cpf_user: 0,
-    ano_fabricacao: 0,
-    ano_modelo: 0,
-    descricao_veiculo: "",
-    nome_fabricante: "",
-    veiculo_marca: "",
-    veiculo_valor: "",
-    __v: 0,
-    _id: ""
+    anoFabricacao: 0,
+    anoModelo: 0,
+    descricaoVeiculo: "",
+    nomeFabricante: "",
+    veiculoMarca: "",
+    veiculoValor: "",
   });
 
   useEffect(() => {
-    api(`anuncioById?id=${itemId}`)
+    api(`anuncios/${itemId}`)
       .then(res => {
+        console.log(`anuncios/${itemId}`)
         console.log(itemId)
-        console.log(res.data[0])
-        let r = res.data[0]
-        console.log(typeof (r))
+        console.log(res.data)
         setAnuncio(res.data[0])
       })
   }, [navigation, itemId])
@@ -44,37 +39,37 @@ const Anuncio = ({ route, navigation }) => {
         <DataTable.Row>
           <View>
             <Text style={styles.textDetalhe}>Nome do fabricante</Text>
-            <Text style={styles.text}>{anuncio.nome_fabricante}</Text>
+            <Text style={styles.text}>{anuncio.nomeFabricante}</Text>
           </View>
         </DataTable.Row>
         <DataTable.Row>
           <View>
             <Text style={styles.textDetalhe}>Marca</Text>
-            <Text style={styles.text}>{anuncio.veiculo_marca}</Text>
+            <Text style={styles.text}>{anuncio.veiculoMarca}</Text>
           </View>
         </DataTable.Row>
         <DataTable.Row>
           <View>
             <Text style={styles.textDetalhe}>Modelo</Text>
-            <Text style={styles.text}>{anuncio.descricao_veiculo}</Text>
+            <Text style={styles.text}>{anuncio.descricaoVeiculo}</Text>
           </View>
         </DataTable.Row>
         <DataTable.Row>
           <View>
             <Text style={styles.textDetalhe}>Ano de fabricação</Text>
-            <Text style={styles.text}>{anuncio.ano_fabricacao}</Text>
+            <Text style={styles.text}>{anuncio.anoFabricacao}</Text>
           </View>
         </DataTable.Row>
         <DataTable.Row>
           <View>
             <Text style={styles.textDetalhe}>Ano do Modelo</Text>
-            <Text style={styles.text}>{anuncio.ano_modelo}</Text>
+            <Text style={styles.text}>{anuncio.anoModelo}</Text>
           </View>
         </DataTable.Row>
         <DataTable.Row>
           <View>
             <Text style={styles.textDetalhe}>Valor do veículo</Text>
-            <Text style={styles.text}>{anuncio.veiculo_valor}</Text>
+            <Text style={styles.text}>{anuncio.veiculoValor}</Text>
           </View>
         </DataTable.Row>
         <Text style={styles.textSecao}>Contatar anunciante</Text>

@@ -24,7 +24,8 @@ const Home = ({ route, navigation }) => {
     api('anuncios')
       .then(res => {
         const slice = res.data.anuncio.slice(0, contadorPagina);
-        setNumAnuncios(res.data["número de registros"])
+        console.log(res.data)
+        setNumAnuncios(res.data.anuncio.length)
         setContadorPagina(contadorPagina + 10)
         setAnuncios(slice)
       })
@@ -69,11 +70,11 @@ const Home = ({ route, navigation }) => {
         removeClippedSubviews={true}
         renderItem={({ item }) => (
           <List.Item
-            title={<Text style={styles.listTitulo}>{item.veiculo_marca} {item.descricao_veiculo}</Text>}
+            title={<Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo}</Text>}
             description={
               <View>
-                <Text>{item.ano_modelo}</Text>
-                <Text style={styles.listPreco}>{item.veiculo_valor}</Text>
+                <Text>{item.anoModelo}</Text>
+                <Text style={styles.listPreco}>{item.veiculoValor}</Text>
               </View>
             }
             descriptionNumberOfLines={2}

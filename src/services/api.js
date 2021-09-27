@@ -1,10 +1,11 @@
 import axios from 'axios';
 import variaveis from './variaveis';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useEffect } from 'react';
 
 const token = localStorage.getItem("token");
 // const token = AsyncStorage.getItem("token");
-
+ 
 const api = axios.create({
   baseURL: variaveis.serverUrl,
   withCredentials: false,

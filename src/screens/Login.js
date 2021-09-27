@@ -12,8 +12,8 @@ const Login = ({ navigation }) => {
   const [visibilidade, setVisibilidade] = useState(false);
 
   const logar = () => {
-    const data = { email_user: email, senha: senha }
-    api.post("auth", data)
+    const data = { emailUser: email, senhaUser: senha }
+    api.post("login", data)
       .then(res => {
         console.log(res)
         // alert(res.data.user._id)

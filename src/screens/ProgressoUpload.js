@@ -8,17 +8,19 @@ const ProgressoUpload = ({ route, navigation }) => {
   // const [isLoading, setIsLoading] = useState(true);
   const { file } = route.params;
   const { status } = route.params;
+  const { type } = route.params;
+  const { apiUrl} = route.params;
 
   useEffect(() => {
     console.log(file.uri)
     const data = new FormData();
     data.append("file", {
       uri: file.uri,
-      type: "text/csv",
+      type: type,
       name: file.name
     });
 
-    api.post('add_anuncio', data)
+    api.post(apiUrl, data)
       .then(res => {
         console.log(res)
         // setIsLoading(false)
@@ -30,7 +32,7 @@ const ProgressoUpload = ({ route, navigation }) => {
       .catch(e => {
         console.log(e.message)
         navigation.navigate('Only Motors', {
-          mensagem: e.data.message,
+          mensagem: e.message,
           visibilidade: true
         });
       })
