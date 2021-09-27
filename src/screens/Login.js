@@ -11,14 +11,19 @@ const Login = ({ navigation }) => {
   const [mensagem, setMensagem] = useState();
   const [visibilidade, setVisibilidade] = useState(false);
 
+  const setToken = async (value) => {
+    await AsyncStorage.setItem('token', value)
+  }
+
   const logar = () => {
     const data = { emailUser: email, senhaUser: senha }
     api.post("login", data)
       .then(res => {
         console.log(res)
         // alert(res.data.user._id)
-        localStorage.setItem('token', res.data.token);
+        // localStorage.setItem('token', res.data.token);
         // AsyncStorage.setItem('token', res.data.token);
+        setToken(res.data.token)
         navigation.navigate('Only Motors')
       })
       .catch(e => {
@@ -30,12 +35,12 @@ const Login = ({ navigation }) => {
 
   return (
     <View>
-      <Alerta mensagem={mensagem} visibilidade={visibilidade}/>
+      <Alerta mensagem={mensagem} visibilidade={visibilidade} />
       <TextInput keyboardType="email-address" value={email} onChangeText={e => setEmail(e)} />
       <TextInput secureTextEntry={true} value={senha} onChangeText={e => setSenha(e)} />
       <Button title="Entrar" onPress={() => logar()} />
       <Text>Não possui uma conta?<Text style={{ color: "#FF7D04", fontWeight: "700" }} onPress={() => navigation.navigate('Cadastro de Usuário')}> Clique aqui</Text>.</Text>
-        
+
     </View >
   );
 }

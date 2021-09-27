@@ -5,6 +5,7 @@ import { Banner, List } from 'react-native-paper';
 import api from '../services/api';
 import variaveis from '../services/variaveis';
 import Alerta from '../components/Alerta';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({ route, navigation }) => {
 
@@ -29,7 +30,7 @@ const Home = ({ route, navigation }) => {
         setContadorPagina(contadorPagina + 10)
         setAnuncios(slice)
       })
-  // }, [isFocused, mensagem, visibilidade])
+    // }, [isFocused, mensagem, visibilidade])
   }, [isFocused])
 
 
@@ -44,7 +45,7 @@ const Home = ({ route, navigation }) => {
 
   return (
     <SafeAreaView>
-      <Alerta mensagem={mensagem} visibilidade={visibilidade}/>
+      <Alerta mensagem={mensagem} visibilidade={visibilidade} />
       {/* <Banner
         visible={visible}
         actions={[

@@ -1,19 +1,40 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
+  useDrawerStatus
 } from '@react-navigation/drawer';
 import { Drawer } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const BarraNavegacao = (props) => {
 
-  const token = localStorage.getItem("token");
+  const drawerOpen = useDrawerStatus()
+  
+  const [token, setToken] = useState();
+  // const token = localStorage.getItem("token");
   // const token = AsyncStorage.getItem("token");
 
-  if (token) {
+  const clearToken = async () => {
+    await AsyncStorage.clear()
+  }
+
+  const getToken = async () => {
+    await AsyncStorage.getItem("token")
+      .then(res => {
+        setToken(res)
+      })
+  }
+
+  useEffect(() => {
+    if (drawerOpen === "open") {
+      getToken()
+    }
+  }, [drawerOpen])
+
+  if (token !== null) {
     return (
       <DrawerContentScrollView {...props}>
         <Drawer.Section>
@@ -41,8 +62,9 @@ const BarraNavegacao = (props) => {
         />
         <DrawerItem
           label="Sair"
-          onPress={() => { localStorage.clear(); props.navigation.navigate('Only Motors'); }}
-        // onPress={() => { AsyncStorage.clear(); props.navigation.navigate('Only Motors'); }}
+          // onPress={() => { localStorage.clear(); props.navigation.navigate('Only Motors'); }}
+          // onPress={() => { AsyncStorage.clear(); props.navigation.navigate('Only Motors'); }}
+          onPress={() => { clearToken(); props.navigation.navigate('Only Motors'); }}
         />
       </DrawerContentScrollView>
     )
