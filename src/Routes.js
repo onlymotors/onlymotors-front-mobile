@@ -6,6 +6,10 @@ import Home from './screens/Home';
 import InserirAnuncio from './screens/InserirAnuncio';
 import Anuncio from './screens/Anuncio';
 import ProgressoUpload from './screens/ProgressoUpload';
+import Login from './screens/Login';
+import AlterarSenha from './screens/AlterarSenha';
+import CadastroUsuario from './screens/CadastroUsuario';
+import PainelUsuario from './screens/PainelUsuario';
 import BarraNavegacao from './components/BarraNavegacao';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -28,13 +32,16 @@ const Routes = () => {
       <Drawer.Navigator
         drawerContent={(props) => <BarraNavegacao {...props} />}
       >
-        <Drawer.Screen name="Login" component={Home} options={drawerOptions}/>
-        <Drawer.Screen name="Only Motors" component={Home} options={drawerOptions}/>
+        <Drawer.Screen name="Only Motors" component={Home} options={drawerOptions} initialParams={{ mensagem: "", visibilidade: false }}/>
+        <Drawer.Screen name="Login" component={Login} options={drawerOptions}/>
         <Drawer.Screen name="Painel de Anúncios" component={Home} options={drawerOptions}/>
         <Drawer.Screen name="Chat" component={Home} options={drawerOptions}/>
         <Drawer.Screen name="Inserir Anúncio" component={InserirAnuncio} options={drawerOptions}/>
         <Drawer.Screen name="Anúncio" component={Anuncio} options={drawerOptions}/>
         <Drawer.Screen name="Progresso de Upload" component={ProgressoUpload} options={drawerOptions}/>
+        <Drawer.Screen name="Alterar Senha" component={AlterarSenha} options={drawerOptions}/>
+        <Drawer.Screen name="Cadastro de Usuário" component={CadastroUsuario} options={drawerOptions}/>
+        <Drawer.Screen name="Painel do Usuário" component={PainelUsuario} options={drawerOptions}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );

@@ -1,18 +1,26 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, SafeAreaView } from 'react-native';
-import { List } from 'react-native-paper';
+import { Banner, List } from 'react-native-paper';
 import api from '../services/api';
 import variaveis from '../services/variaveis';
+import Alerta from '../components/Alerta';
 
-const Home = ({ navigation }) => {
+const Home = ({ route, navigation }) => {
 
   const [anuncios, setAnuncios] = useState();
   const [contadorPagina, setContadorPagina] = useState(20)
   const [numAnuncios, setNumAnuncios] = useState();
   const isFocused = useIsFocused();
+  // const [innerMensagem, setInnerMensagem] = useState();
+  // const [visible, setVisible] = React.useState();
+  const { mensagem } = route.params;
+  const { visibilidade } = route.params;
 
   useEffect(() => {
+    // console.log(mensagem, visibilidade)
+    // setInnerMensagem(mensagem)
+    // setVisible(visibilidade)
     api('anuncios')
       .then(res => {
         const slice = res.data.anuncio.slice(0, contadorPagina);
@@ -20,7 +28,9 @@ const Home = ({ navigation }) => {
         setContadorPagina(contadorPagina + 10)
         setAnuncios(slice)
       })
+  // }, [isFocused, mensagem, visibilidade])
   }, [isFocused])
+
 
   const trocarPagina = async () => {
     await api("anuncios")
@@ -33,6 +43,18 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView>
+      <Alerta mensagem={mensagem} visibilidade={visibilidade}/>
+      {/* <Banner
+        visible={visible}
+        actions={[
+          {
+            label: 'Aceitar',
+            onPress: () => setVisible(false),
+          }
+        ]}
+      >
+        {innerMensagem}
+      </Banner> */}
       <FlatList
         data={anuncios}
         onEndReachedThreshold={1}

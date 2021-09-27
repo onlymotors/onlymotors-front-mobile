@@ -15,7 +15,8 @@ const InserirAnuncio = ({ navigation }) => {
     })
 
     navigation.navigate('Progresso de Upload', {
-      file: file
+      file: file,
+      status: "Cadastrando anúncio(s)..."
     });
   }
 

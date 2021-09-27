@@ -5,8 +5,9 @@ import { ProgressBar } from 'react-native-paper';
 
 const ProgressoUpload = ({ route, navigation }) => {
 
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const { file } = route.params;
+  const { status } = route.params;
 
   useEffect(() => {
     console.log(file.uri)
@@ -20,24 +21,35 @@ const ProgressoUpload = ({ route, navigation }) => {
     api.post('add_anuncio', data)
       .then(res => {
         console.log(res)
+        // setIsLoading(false)
+        navigation.navigate('Only Motors', {
+          mensagem: res.data.message,
+          visibilidade: true
+        });
+      })
+      .catch(e => {
+        console.log(e.message)
+        navigation.navigate('Only Motors', {
+          mensagem: e.data.message,
+          visibilidade: true
+        });
       })
 
-    setIsLoading(false)
-  }, [file])
+  }, [])
 
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <ProgressBar indeterminate color="#FF7D04" style={styles.progress} />
-        <Text style={styles.texto}>Cadastrando anúncio(s)...</Text>
-      </View>
-    )
-  }
+  // if (isLoading) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <ProgressBar indeterminate color="#FF7D04" style={styles.progress} />
+  //       <Text style={styles.texto}>Cadastrando anúncio(s)...</Text>
+  //     </View>
+  //   )
+  // }
 
   return (
     <View style={styles.container}>
       <ProgressBar progress={1} color="#FF7D04" style={styles.progress} />
-      <Text style={styles.texto}>Anúncio(s) cadastrado(s) com sucesso!</Text>
+      <Text style={styles.texto}>{status}</Text>
     </View>
   );
 }
