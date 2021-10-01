@@ -1,15 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
 const variaveis = {
   serverUrl: 'http://192.168.18.5:3333/'
+  // serverUrl: 'http://033d-2804-5f0c-1127-ea00-19ed-1307-bdb-b848.ngrok.io/'
 }
 
 export default variaveis;
-
-export async function getToken() {
-  try {
-    return await AsyncStorage.getItem('token');
-  } catch (e) {
-    throw e;
-  }
-}

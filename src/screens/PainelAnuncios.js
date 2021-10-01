@@ -16,7 +16,6 @@ const PainelAnuncios = ({ navigation }) => {
     api('anuncios/userid')
       .then(res => {
         const slice = res.data.anuncio.slice(0, contadorPagina);
-        console.log(res.data)
         setNumAnuncios(res.data.anuncio.length)
         setContadorPagina(contadorPagina + 10)
         setAnuncios(slice)
@@ -42,6 +41,11 @@ const PainelAnuncios = ({ navigation }) => {
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.headerSubTitulo}>{numAnuncios} anúncios encontrados</Text>
+
+            <View style={styles.direcao}>
+              <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} onPress={() => { }} style={styles.botao}>Inserir Anúncio</Button>
+              <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} onPress={() => { }} style={styles.botao}>Gerar Relatório</Button>
+            </View>
           </View>
         }
         keyExtractor={item => item._id.toString()}
@@ -51,10 +55,9 @@ const PainelAnuncios = ({ navigation }) => {
             title={<Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo}</Text>}
             description={
               <View>
-                <Text>{item.anoModelo}</Text>
                 <View style={styles.direcao}>
-                <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} onPress={()=>{}} style={styles.botao}>Pausar</Button>
-                <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} onPress={()=>{}} style={styles.botao}>Excluir</Button>
+                  <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} onPress={() => { }} style={styles.botao}>Pausar</Button>
+                  <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} onPress={() => { }} style={styles.botao}>Excluir</Button>
                 </View>
               </View>
             }
@@ -94,6 +97,7 @@ const styles = StyleSheet.create({
     fontWeight: "700"
   },
   headerSubTitulo: {
+    fontSize: 18,
     textAlign: "center"
   },
   tinyLogo: {

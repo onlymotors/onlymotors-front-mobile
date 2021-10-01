@@ -1,11 +1,10 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, SafeAreaView } from 'react-native';
-import { Banner, List } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import api from '../services/api';
 import variaveis from '../services/variaveis';
 import Alerta from '../components/Alerta';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({ route, navigation }) => {
 
@@ -13,50 +12,40 @@ const Home = ({ route, navigation }) => {
   const [contadorPagina, setContadorPagina] = useState(20)
   const [numAnuncios, setNumAnuncios] = useState();
   const isFocused = useIsFocused();
-  // const [innerMensagem, setInnerMensagem] = useState();
-  // const [visible, setVisible] = React.useState();
   const { mensagem } = route.params;
   const { visibilidade } = route.params;
 
   useEffect(() => {
-    // console.log(mensagem, visibilidade)
-    // setInnerMensagem(mensagem)
-    // setVisible(visibilidade)
     api('anuncios')
       .then(res => {
         const slice = res.data.anuncio.slice(0, contadorPagina);
-        console.log(res.data)
         setNumAnuncios(res.data.anuncio.length)
         setContadorPagina(contadorPagina + 10)
         setAnuncios(slice)
       })
-    // }, [isFocused, mensagem, visibilidade])
+      .catch(e => {
+        console.log("Erro ao coletar anuncios")
+      })
   }, [isFocused])
 
 
   const trocarPagina = async () => {
-    await api("anuncios")
-      .then(r => {
-        const slice = r.data.anuncio.slice(0, contadorPagina);
-        setContadorPagina(contadorPagina + 10)
-        setAnuncios(slice)
-      })
+    if (anuncios.length < numAnuncios) {
+      await api("anuncios")
+        .then(r => {
+          const slice = r.data.anuncio.slice(0, contadorPagina);
+          setContadorPagina(contadorPagina + 10)
+          setAnuncios(slice)
+        })
+        .catch(e => {
+          console.log("Erro ao coletar anuncios")
+        })
+    }
   }
 
   return (
     <SafeAreaView>
       <Alerta mensagem={mensagem} visibilidade={visibilidade} />
-      {/* <Banner
-        visible={visible}
-        actions={[
-          {
-            label: 'Aceitar',
-            onPress: () => setVisible(false),
-          }
-        ]}
-      >
-        {innerMensagem}
-      </Banner> */}
       <FlatList
         data={anuncios}
         onEndReachedThreshold={1}

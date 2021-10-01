@@ -1,45 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   DrawerContentScrollView,
-  DrawerItemList,
   DrawerItem,
   useDrawerStatus
 } from '@react-navigation/drawer';
 import { Drawer } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import api from '../services/api';
+import { getToken, clearToken } from '../services/tokenService';
 
 const BarraNavegacao = (props) => {
 
   const drawerOpen = useDrawerStatus()
-  
+  const [nomeUser, setNomeUser] = useState("")
   const [token, setToken] = useState();
-  // const token = localStorage.getItem("token");
-  // const token = AsyncStorage.getItem("token");
-
-  const clearToken = async () => {
-    await AsyncStorage.clear()
-  }
-
-  const getToken = async () => {
-    await AsyncStorage.getItem("token")
-      .then(res => {
-        setToken(res)
-      })
-  }
 
   useEffect(() => {
     if (drawerOpen === "open") {
       getToken()
+        .then(res => {
+          setToken(res)
+        })
+        .catch(e => {
+          console.log("Erro ao coletar o token no menu")
+        })
     }
   }, [drawerOpen])
 
+  const getUser = () => {
+    api(`users/userid`)
+      .then(res => {
+        setNomeUser(res.data[0].nomeUser.split(" ")[0])
+      })
+      .catch(e => {
+        console.log("Erro ao coletar o nomeUser no menu")
+      })
+  }
+
   if (token !== null) {
+
+    getUser()
+
     return (
       <DrawerContentScrollView {...props}>
         <Drawer.Section>
           <DrawerItem
-            label="NomeUsuario"
+            label={nomeUser}
             labelStyle={styles.textSecao}
             onPress={() => { props.navigation.navigate('Painel do Usuário') }}
           />
@@ -63,8 +69,11 @@ const BarraNavegacao = (props) => {
         <DrawerItem
           label="Sair"
           // onPress={() => { localStorage.clear(); props.navigation.navigate('Only Motors'); }}
-          // onPress={() => { AsyncStorage.clear(); props.navigation.navigate('Only Motors'); }}
           onPress={() => { clearToken(); props.navigation.navigate('Only Motors'); }}
+        />
+        <DrawerItem
+          label="Alterar Dados Cadastrais"
+          onPress={() => { props.navigation.navigate('Alterar Dados Cadastrais'); }}
         />
       </DrawerContentScrollView>
     )
@@ -94,6 +103,10 @@ const BarraNavegacao = (props) => {
       <DrawerItem
         label="Inserir Anúncio"
         onPress={() => { props.navigation.navigate('Login') }}
+      />
+      <DrawerItem
+        label="Alterar Dados Cadastrais"
+        onPress={() => { props.navigation.navigate('Alterar Dados Cadastrais'); }}
       />
     </DrawerContentScrollView>
   );

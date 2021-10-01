@@ -19,9 +19,6 @@ const Anuncio = ({ route, navigation }) => {
   useEffect(() => {
     api(`anuncios/${itemId}`)
       .then(res => {
-        console.log(`anuncios/${itemId}`)
-        console.log(itemId)
-        console.log(res.data)
         setAnuncio(res.data[0])
       })
   }, [navigation, itemId])
@@ -72,7 +69,7 @@ const Anuncio = ({ route, navigation }) => {
             <Text style={styles.text}>{anuncio.veiculoValor}</Text>
           </View>
         </DataTable.Row>
-        <Text style={styles.textSecao}>Contatar anunciante</Text>
+        <Text style={styles.textSecao}>Contatar anunciante:</Text>
         <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} style={styles.botao}>Mensagem</Button>
       </ScrollView>
     </SafeAreaView >
