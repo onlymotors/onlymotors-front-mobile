@@ -1,38 +1,66 @@
-import React from 'react';
-import { Text, ScrollView, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, ScrollView, StyleSheet, Linking } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { Button, List } from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import variaveis from '../services/variaveis';
 import api from '../services/api';
+import { useIsFocused } from '@react-navigation/core';
+import ProgressoUpload from '../components/ProgressoUpload';
 
-const CadastroUsuario = ({ navigation }) => {
+const CadastroUsuario = ({ navigation, route }) => {
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [file, setFile] = useState()
+  const [status, setStatus] = useState("")
+  const [type, setType] = useState("")
+  const [apiUrl, setApiUrl] = useState("")
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [isFocused])
 
   const enviarUpload = async () => {
-
-    const file = await DocumentPicker.getDocumentAsync({
+    await DocumentPicker.getDocumentAsync({
       copyToCacheDirectory: false
     })
-
-    navigation.navigate('Progresso de Upload', {
-      file: file,
-      status: "Cadastrando usuário(s)...",
-      type: "text/csv",
-      apiUrl: "users"
-    });
+      .then(file => {
+        setFile(file)
+        setStatus("Cadastrando usuário(s)...")
+        setType("text/csv")
+        setApiUrl("users")
+      })
+      .finally(() => {
+        setIsLoading(true)
+      })
   }
 
   const imagens = [
     {
-      url: variaveis.serverUrl + "images/template.png"
+      url: variaveis.serverUrl + "images/template_usuario.png"
     }
   ]
+
+  if (isLoading) {
+    return (
+      <ProgressoUpload
+        navigation={navigation}
+        route={route}
+        file={file}
+        status={status}
+        type={type}
+        apiUrl={apiUrl}
+      />
+    )
+  }
 
   return (
     <ScrollView >
       <List.Item
         title="Passo 1"
-        description={<Text>Crie um arquivo.csv no seguinte formato. <Text style={{ color: "#FF7D04", fontWeight: "700" }} onPress={() => Linking.openURL('http://192.168.18.5:3333/download/template.csv')}>Clique aqui</Text> para baixar o template.</Text>}
+        description={<Text>Crie um arquivo.csv no seguinte formato. <Text style={{ color: "#FF7D04", fontWeight: "700" }} onPress={() => Linking.openURL('http://192.168.18.5:3333/download/template_usuario.csv')}>Clique aqui</Text> para baixar o template.</Text>}
       />
       <List.Item
         title="Exemplo CSV"
@@ -51,7 +79,15 @@ const CadastroUsuario = ({ navigation }) => {
         description="Agora clique no botão enviar para escolher o arquivo e enviá-lo automaticamente."
         descriptionNumberOfLines={2}
       />
-      <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} onPress={enviarUpload} style={styles.botao}>Enviar</Button>
+      <Button
+        mode="contained"
+        color="#FF7D04"
+        labelStyle={{ color: "white" }}
+        onPress={enviarUpload}
+        style={styles.botao}
+      >
+        Enviar
+      </Button>
     </ScrollView>
   );
 }

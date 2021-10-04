@@ -20,6 +20,7 @@ const Anuncio = ({ route, navigation }) => {
     api(`anuncios/${itemId}`)
       .then(res => {
         setAnuncio(res.data[0])
+        api.patch(`anuncios/${itemId}/numvisitas`, { contagem: res.data[0].numVisitas + 1 })
       })
   }, [navigation, itemId])
 
@@ -70,7 +71,14 @@ const Anuncio = ({ route, navigation }) => {
           </View>
         </DataTable.Row>
         <Text style={styles.textSecao}>Contatar anunciante:</Text>
-        <Button mode="contained" color="#FF7D04" labelStyle={{ color: "white" }} style={styles.botao}>Mensagem</Button>
+        <Button
+          mode="contained"
+          color="#FF7D04"
+          labelStyle={{ color: "white" }}
+          style={styles.botao}
+        >
+          Mensagem
+        </Button>
       </ScrollView>
     </SafeAreaView >
   );

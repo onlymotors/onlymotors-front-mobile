@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import api from '../services/api';
 import Alerta from '../components/Alerta';
 import { Button, TextInput } from 'react-native-paper';
 import { setToken } from '../services/tokenService';
-const Login = ({ navigation }) => {
+import { useIsFocused } from '@react-navigation/core';
 
+const Login = ({ navigation, route }) => {
+
+  const isFocused = useIsFocused();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [mensagem, setMensagem] = useState("");
-  const [visibilidade, setVisibilidade] = useState(false);
+  const mensagemRecebida = route.params.mensagem;
+  const { visibilidade } = route.params;
+  const [visible, setVisible] = useState(false);
+  const [mensagem, setMensagem] = useState(mensagemRecebida);
+
+  useEffect(() => {
+    setVisible(visibilidade)
+    setMensagem(mensagemRecebida)
+  }, [isFocused]);
 
   const logar = () => {
     const data = { emailUser: email, senhaUser: senha }
@@ -22,26 +32,54 @@ const Login = ({ navigation }) => {
         else {
           navigation.navigate('Alterar Dados Cadastrais', {
             token: res.data.token,
+            senha: senha
           })
         }
       })
       .catch(e => {
         setMensagem(e.response.data.error)
-        setVisibilidade(true)
+        setVisible(true)
       })
   }
 
   return (
     <View>
-      <Alerta mensagem={mensagem} visibilidade={visibilidade} />
+      <Alerta mensagem={mensagem} visible={visible} setVisible={setVisible} />
       <View style={styles.inputContainerTop}>
-        <TextInput label="E-mail" mode="outlined" keyboardType="email-address" value={email} onChangeText={e => setEmail(e)} />
+        <TextInput
+          label="E-mail"
+          mode="outlined"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={e => setEmail(e)}
+        />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput label="Senha" mode="outlined" secureTextEntry={true} value={senha} onChangeText={e => setSenha(e)} />
+        <TextInput
+          label="Senha"
+          mode="outlined"
+          secureTextEntry={true}
+          value={senha}
+          onChangeText={e => setSenha(e)}
+        />
       </View>
-      <Button mode="contained" color="#FF7D04" style={styles.botao} labelStyle={{ color: "white" }} onPress={() => logar()} >Entrar</Button>
-      <Text style={styles.texto}>Não possui uma conta?<Text style={{ color: "#FF7D04", fontWeight: "700" }} onPress={() => navigation.navigate('Cadastro de Usuário')}> Clique aqui</Text>.</Text>
+      <Button
+        mode="contained"
+        color="#FF7D04"
+        style={styles.botao}
+        labelStyle={{ color: "white" }}
+        onPress={() => logar()}
+      >
+        Entrar
+      </Button>
+      <Text style={styles.texto}>
+        Não possui uma conta?
+        <Text
+          style={{ color: "#FF7D04", fontWeight: "700" }}
+          onPress={() => navigation.navigate('Cadastro de Usuário')}
+        > Clique aqui</Text>
+        .
+      </Text>
 
     </View >
   );

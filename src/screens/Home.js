@@ -14,8 +14,10 @@ const Home = ({ route, navigation }) => {
   const isFocused = useIsFocused();
   const { mensagem } = route.params;
   const { visibilidade } = route.params;
+  const [visible, setVisible] = useState(visibilidade);
 
   useEffect(() => {
+    setVisible(visibilidade)
     api('anuncios')
       .then(res => {
         const slice = res.data.anuncio.slice(0, contadorPagina);
@@ -45,7 +47,7 @@ const Home = ({ route, navigation }) => {
 
   return (
     <SafeAreaView>
-      <Alerta mensagem={mensagem} visibilidade={visibilidade} />
+      <Alerta mensagem={mensagem} visible={visible} setVisible={setVisible} />
       <FlatList
         data={anuncios}
         onEndReachedThreshold={1}
@@ -60,7 +62,11 @@ const Home = ({ route, navigation }) => {
         removeClippedSubviews={true}
         renderItem={({ item }) => (
           <List.Item
-            title={<Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo}</Text>}
+            title={
+              <Text style={styles.listTitulo}>
+                {item.veiculoMarca} {item.descricaoVeiculo}
+              </Text>
+            }
             description={
               <View>
                 <Text>{item.anoModelo}</Text>
@@ -77,7 +83,7 @@ const Home = ({ route, navigation }) => {
               <Image
                 style={styles.tinyLogo}
                 source={{
-                  uri: variaveis.serverUrl + "images/sem_foto.png"
+                  uri: `${variaveis.serverUrl}images/${(item.fotoAnuncio) ? item.fotoAnuncio : "sem_foto.png"}`
                 }}
               />
             }

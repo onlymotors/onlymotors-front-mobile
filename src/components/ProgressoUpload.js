@@ -1,32 +1,28 @@
 import React, { useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/core';
 import { View, Text, StyleSheet } from 'react-native';
 import api from '../services/api';
-import { ProgressBar } from 'react-native-paper';
+import { ActivityIndicator, ProgressBar } from 'react-native-paper';
 
-const ProgressoUpload = ({ route, navigation }) => {
-
-  const { file } = route.params;
-  const { status } = route.params;
-  const { type } = route.params;
-  const { apiUrl } = route.params;
+const ProgressoUpload = (props) => {
 
   useEffect(() => {
     const data = new FormData();
     data.append("file", {
-      uri: file.uri,
-      type: type,
-      name: file.name
+      uri: props.file.uri,
+      type: props.type,
+      name: props.file.name
     });
 
-    api.post(apiUrl, data)
+    api.post(props.apiUrl, data)
       .then(res => {
-        navigation.navigate('Only Motors', {
+        props.navigation.navigate('Only Motors', {
           mensagem: res.data.message,
           visibilidade: true
         });
       })
       .catch(e => {
-        navigation.navigate('Only Motors', {
+        props.navigation.navigate('Only Motors', {
           mensagem: e.message,
           visibilidade: true
         });
@@ -36,8 +32,8 @@ const ProgressoUpload = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ProgressBar progress={1} color="#FF7D04" style={styles.progress} />
-      <Text style={styles.texto}>{status}</Text>
+      <ActivityIndicator animating={true} size="large" />
+      <Text style={styles.texto}>{props.status}</Text>
     </View>
   );
 }

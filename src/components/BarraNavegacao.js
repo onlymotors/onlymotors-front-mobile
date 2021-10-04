@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItem,
+  DrawerItemList,
   useDrawerStatus
 } from '@react-navigation/drawer';
 import { Drawer } from 'react-native-paper';
@@ -14,6 +15,7 @@ const BarraNavegacao = (props) => {
   const drawerOpen = useDrawerStatus()
   const [nomeUser, setNomeUser] = useState("")
   const [token, setToken] = useState();
+  const [active, setActive] = React.useState('');
 
   useEffect(() => {
     if (drawerOpen === "open") {
@@ -34,6 +36,7 @@ const BarraNavegacao = (props) => {
       })
       .catch(e => {
         console.log("Erro ao coletar o nomeUser no menu")
+        clearToken()
       })
   }
 
@@ -50,6 +53,7 @@ const BarraNavegacao = (props) => {
             onPress={() => { props.navigation.navigate('Painel do Usuário') }}
           />
         </Drawer.Section>
+        {/* <DrawerItemList {...props} /> */}
         <DrawerItem
           label="Página Inicial"
           onPress={() => { props.navigation.navigate('Only Motors') }}
@@ -68,12 +72,7 @@ const BarraNavegacao = (props) => {
         />
         <DrawerItem
           label="Sair"
-          // onPress={() => { localStorage.clear(); props.navigation.navigate('Only Motors'); }}
           onPress={() => { clearToken(); props.navigation.navigate('Only Motors'); }}
-        />
-        <DrawerItem
-          label="Alterar Dados Cadastrais"
-          onPress={() => { props.navigation.navigate('Alterar Dados Cadastrais'); }}
         />
       </DrawerContentScrollView>
     )
@@ -103,10 +102,6 @@ const BarraNavegacao = (props) => {
       <DrawerItem
         label="Inserir Anúncio"
         onPress={() => { props.navigation.navigate('Login') }}
-      />
-      <DrawerItem
-        label="Alterar Dados Cadastrais"
-        onPress={() => { props.navigation.navigate('Alterar Dados Cadastrais'); }}
       />
     </DrawerContentScrollView>
   );
