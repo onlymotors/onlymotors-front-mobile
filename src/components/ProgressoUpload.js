@@ -8,26 +8,40 @@ const ProgressoUpload = (props) => {
 
   useEffect(() => {
     const data = new FormData();
-    data.append("file", {
+    data.append(props.requestName, {
       uri: props.file.uri,
       type: props.type,
       name: props.file.name
     });
-
-    api.post(props.apiUrl, data)
-      .then(res => {
-        props.navigation.navigate('Only Motors', {
-          mensagem: res.data.message,
-          visibilidade: true
-        });
-      })
-      .catch(e => {
-        props.navigation.navigate('Only Motors', {
-          mensagem: e.message,
-          visibilidade: true
-        });
-      })
-
+    if (props.httpMethod === "post") {
+      api.post(props.apiUrl, data)
+        .then(res => {
+          props.navigation.navigate('Only Motors', {
+            mensagem: res.data.message,
+            visibilidade: true
+          });
+        })
+        .catch(e => {
+          props.navigation.navigate('Only Motors', {
+            mensagem: e.message,
+            visibilidade: true
+          });
+        })
+    } else {
+      api.patch(props.apiUrl, data)
+        .then(res => {
+          props.navigation.navigate('Painel de Anúncios', {
+            mensagem: res.data.message,
+            visibilidade: true
+          });
+        })
+        .catch(e => {
+          props.navigation.navigate('Painel de Anúncios', {
+            mensagem: e.message,
+            visibilidade: true
+          });
+        })
+    }
   }, [])
 
   return (

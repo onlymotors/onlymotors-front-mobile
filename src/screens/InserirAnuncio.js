@@ -48,6 +48,8 @@ const InserirAnuncio = ({ navigation, route }) => {
       <ProgressoUpload
         navigation={navigation}
         route={route}
+        requestName = "file"
+        httpMethod = "post"
         file={file}
         status={status}
         type={type}
@@ -72,7 +74,7 @@ const InserirAnuncio = ({ navigation, route }) => {
       <ImageViewer
         renderIndicator={() => <Text></Text>}
         style={styles.exemplo}
-        imageUrls={imagens}
+        urlImages={imagens}
       />
       <List.Item
         title="Passo 2"

@@ -14,6 +14,7 @@ const Anuncio = ({ route, navigation }) => {
     nomeFabricante: "",
     veiculoMarca: "",
     veiculoValor: "",
+    urlImage: ""
   });
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const Anuncio = ({ route, navigation }) => {
         <Image
           style={styles.img}
           source={{
-            uri: variaveis.serverUrl + "images/sem_foto.png"
+            uri: `${(anuncio.urlImage) ? anuncio.urlImage : variaveis.serverUrl + "images/sem_foto.png"}`
           }}
         />
         <Text style={styles.textSecao}>Informações do anúncio</Text>

@@ -48,6 +48,8 @@ const CadastroUsuario = ({ navigation, route }) => {
       <ProgressoUpload
         navigation={navigation}
         route={route}
+        requestName = "file"
+        httpMethod = "post"
         file={file}
         status={status}
         type={type}

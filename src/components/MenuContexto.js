@@ -23,9 +23,12 @@ const MenuContexto = (props) => {
     }
     await api.patch(`anuncios/${props.anuncioId}`, dados)
       .then(res => {
-        props.navigation.navigate("Painel de Anúncios")
+        props.navigation.navigate("Painel de Anúncios", {
+          mensagem: res.data.message
+        })
       })
       .finally(() => {
+        props.setVisible(true)
         props.setRenderizar(props.renderizar + 1)
       })
   }

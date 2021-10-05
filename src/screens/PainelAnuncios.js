@@ -31,18 +31,19 @@ const PainelAnuncios = ({ navigation, route }) => {
     setIsLoading(false)
   }, [isFocused])
 
-  const inserirFoto = async () => {
+  const inserirFoto = async (item) => {
     await DocumentPicker.getDocumentAsync({
       copyToCacheDirectory: false
     })
       .then(file => {
         setFile(file)
         setStatus("Enviando foto...")
-        setType("")
-        setApiUrl("anuncios/fotoAnuncio")
+        setType("image/jpeg")
+        setApiUrl(`anuncios/${item._id}`)
       })
       .finally(() => {
         setIsLoading(true)
+        setRenderizar(renderizar + 1)
       })
   }
 
@@ -65,6 +66,9 @@ const PainelAnuncios = ({ navigation, route }) => {
         setContadorPagina(30)
         setAnuncios(slice)
       })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [renderizar])
 
 
@@ -84,6 +88,8 @@ const PainelAnuncios = ({ navigation, route }) => {
       <ProgressoUpload
         navigation={navigation}
         route={route}
+        requestName="image"
+        httpMethod="patch"
         file={file}
         status={status}
         type={type}
@@ -137,11 +143,11 @@ const PainelAnuncios = ({ navigation, route }) => {
         renderItem={({ item }) => (
           <List.Item
             left={() =>
-              <TouchableOpacity onPress={() => { inserirFoto() }}>
+              <TouchableOpacity onPress={() => { inserirFoto(item) }}>
                 <Image
                   style={styles.tinyLogo}
                   source={{
-                    uri: `${variaveis.serverUrl}images/${(item.fotoAnuncio) ? item.fotoAnuncio : "inserir_foto.png"}`
+                    uri: `${(item.urlImage) ? item.urlImage : variaveis.serverUrl + "images/inserir_foto.png"}`
                   }}
                 />
               </TouchableOpacity>
@@ -163,35 +169,12 @@ const PainelAnuncios = ({ navigation, route }) => {
               />
             }
             title={
-              <Text
-                onPress={() => {
-                  navigation.navigate('Anúncio', {
-                    itemId: item._id
-                  });
-                }}
-              >
-                {(item.statusAnuncio)
-                  ?
-                  <View>
-                    <Text style={styles.badgePublicado}>
-                      <Text>Publicado</Text>
-                    </Text>
-                    <Text style={styles.listTitulo}>
-                      {item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}
-                    </Text>
-                  </View>
-                  :
-                  <View>
-                    <Text style={styles.badgePausado}><Text>Pausado</Text></Text>
-                    <Text style={styles.listTitulo}>
-                      {item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}
-                    </Text>
-                  </View>
-                }
-              </Text>
-            }
+              (item.statusAnuncio)
+                ? <View><View style={styles.badgePublicado}><Text style={styles.textoPulicado}>Publicado</Text></View><Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text></View>
+                : <View><View style={styles.badgePausado}><Text style={styles.textoPausado}>Pausado</Text></View><Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text></View>}
             description={
               < View >
+                {/* <Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text> */}
                 <Text>Visitas: <Text style={styles.numeroNegrito}>{item.numVisitas}</Text>   Contatos: <Text style={styles.numeroNegrito}>{item.numContatos}</Text></Text>
                 <Text style={styles.listPreco}>{item.veiculoValor}</Text>
               </View >
@@ -258,28 +241,44 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   badgePausado: {
-    fontSize: 12,
     borderColor: "#FF7D04",
     borderRadius: 50,
     backgroundColor: "#21282B",
     marginBottom: 5,
-    color: "#FFF",
+    fontSize: 12,
+    // color: "#FFF",
     alignSelf: "flex-start",
     padding: 5,
     paddingLeft: 10,
     paddingRight: 10,
   },
   badgePublicado: {
-    fontSize: 12,
     borderColor: "#FF7D04",
     borderRadius: 50,
     backgroundColor: "#1b9382",
     marginBottom: 5,
-    color: "#FFF",
+    fontSize: 12,
+    // color: "#FFF",
     alignSelf: "flex-start",
     padding: 5,
     paddingLeft: 10,
     paddingRight: 10,
+  },
+  textoPausado: {
+    fontSize: 12,
+    color: "#FFF",
+    // alignSelf: "flex-start",
+    // padding: 5,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+  },
+  textoPulicado: {
+    fontSize: 12,
+    color: "#FFF",
+    // alignSelf: "flex-start",
+    // padding: 5,
+    // paddingLeft: 10,
+    // paddingRight: 10,
   }
 });
 

@@ -83,7 +83,7 @@ const Home = ({ route, navigation }) => {
               <Image
                 style={styles.tinyLogo}
                 source={{
-                  uri: `${variaveis.serverUrl}images/${(item.fotoAnuncio) ? item.fotoAnuncio : "sem_foto.png"}`
+                  uri: `${(item.urlImage) ? item.urlImage : variaveis.serverUrl + "images/sem_foto.png"}`
                 }}
               />
             }
