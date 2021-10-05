@@ -12,7 +12,7 @@ const PainelUsuario = ({ route, navigation }) => {
   const { visibilidade } = route.params;
   const [visible, setVisible] = useState(visibilidade);
 
-  const [senha, setSenha] = useState("");
+  // const [senha, setSenha] = useState("");
 
   const [visibleModal, setVisibleModal] = useState(false);
 
@@ -50,6 +50,9 @@ const PainelUsuario = ({ route, navigation }) => {
       .then(res => {
         setUsuario(res.data[0])
       })
+      .catch(() => {
+        console.log("Acesso negado ao recuperar dados do usuário")
+      })
   }, [isFocused])
 
   const excluir = async () => {
@@ -79,23 +82,35 @@ const PainelUsuario = ({ route, navigation }) => {
             onDismiss={hideModal}
             contentContainerStyle={styles.modal}
           >
-            <Text>Digite sua senha para confirmar a exclusão de sua conta:</Text>
-            <TextInput
+            {/* <Text>Digite sua senha para confirmar a exclusão de sua conta:</Text> */}
+            <Text>Tem certeza que deseja excluir sua conta? Clique no botão para confirmar a exclusão.</Text>
+            {/* <TextInput
               label="Senha"
               mode="outlined"
               secureTextEntry={true}
               value={senha}
               onChangeText={e => setSenha(e)}
-            />
-            <Button
-              mode="contained"
-              color="#FF7D04"
-              style={styles.botaoConfirmar}
-              labelStyle={{ color: "white" }}
-              onPress={() => excluir()}
-            >
-              Confirmar
-            </Button>
+            /> */}
+            <View style={styles.direcaoExclusao}>
+              <Button
+                mode="contained"
+                color="#FF7D04"
+                style={styles.botaoConfirmar}
+                labelStyle={{ color: "white" }}
+                onPress={() => { hideModal(); excluir(); }}
+              >
+                Excluir
+              </Button>
+              <Button
+                mode="contained"
+                color="#FF7D04"
+                style={styles.botaoConfirmar}
+                labelStyle={{ color: "white" }}
+                onPress={() => { hideModal(); }}
+              >
+                Cancelar
+              </Button>
+            </View>
           </Modal>
         </Portal>
         <Text style={styles.textSecao}>Informações da conta</Text>
@@ -240,6 +255,7 @@ const styles = StyleSheet.create({
   },
   botaoConfirmar: {
     marginTop: 17,
+    margin: 8,
     alignSelf: "center"
   },
   direcao: {
@@ -247,6 +263,11 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     alignItems: "flex-start"
     // flexWrap: "wrap"
+  },
+  direcaoExclusao: {
+    flexDirection: "row",
+    alignSelf: "center",
+    alignItems: "center"
   }
 });
 
