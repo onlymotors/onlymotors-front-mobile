@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { List } from 'react-native-paper';
 import api from '../services/api';
-import variaveis from '../services/variaveis';
 import Alerta from '../components/Alerta';
+import { API_URL } from 'react-native-dotenv';
 
 const Home = ({ route, navigation }) => {
 
@@ -83,7 +83,7 @@ const Home = ({ route, navigation }) => {
               <Image
                 style={styles.tinyLogo}
                 source={{
-                  uri: `${(item.urlImage) ? item.urlImage : variaveis.serverUrl + "images/sem_foto.png"}`
+                  uri: `${(item.urlImage) ? item.urlImage : API_URL + "images/sem_foto.png"}`
                 }}
               />
             }

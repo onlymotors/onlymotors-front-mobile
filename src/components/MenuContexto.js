@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, Menu, Divider, Provider } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Button, Menu } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../services/api';
 

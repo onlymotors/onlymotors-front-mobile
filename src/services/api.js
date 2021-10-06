@@ -1,9 +1,9 @@
 import axios from 'axios';
-import variaveis from './variaveis';
 import { getToken } from './tokenService';
+import { API_URL } from 'react-native-dotenv';
 
 const api = axios.create({
-  baseURL: variaveis.serverUrl,
+  baseURL: API_URL,
   withCredentials: false,
   headers: {
     Accept: 'application/json',

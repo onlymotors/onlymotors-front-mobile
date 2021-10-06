@@ -3,8 +3,7 @@ import { Text, ScrollView, StyleSheet, Linking } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { Button, List } from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import variaveis from '../services/variaveis';
-import api from '../services/api';
+import { API_URL } from 'react-native-dotenv';
 import { useIsFocused } from '@react-navigation/core';
 import ProgressoUpload from '../components/ProgressoUpload';
 
@@ -27,19 +26,24 @@ const CadastroUsuario = ({ navigation, route }) => {
       copyToCacheDirectory: false
     })
       .then(file => {
-        setFile(file)
-        setStatus("Cadastrando usuário(s)...")
-        setType("text/csv")
-        setApiUrl("users")
+        if (file.type == 'success') {
+          setFile(file)
+          setStatus("Cadastrando usuário(s)...")
+          setType("text/csv")
+          setApiUrl("users")
+          setIsLoading(true)
+        } else {
+          return
+        }
       })
-      .finally(() => {
-        setIsLoading(true)
+      .catch(e => {
+        console.log("Erro ao coletar arquivo")
       })
   }
 
   const imagens = [
     {
-      url: variaveis.serverUrl + "images/template_usuario.png"
+      url: API_URL + "images/template_usuario.png"
     }
   ]
 
@@ -48,8 +52,8 @@ const CadastroUsuario = ({ navigation, route }) => {
       <ProgressoUpload
         navigation={navigation}
         route={route}
-        requestName = "file"
-        httpMethod = "post"
+        requestName="file"
+        httpMethod="post"
         file={file}
         status={status}
         type={type}
@@ -85,7 +89,7 @@ const CadastroUsuario = ({ navigation, route }) => {
         mode="contained"
         color="#FF7D04"
         labelStyle={{ color: "white" }}
-        onPress={enviarUpload}
+        onPress={() => enviarUpload()}
         style={styles.botao}
       >
         Enviar

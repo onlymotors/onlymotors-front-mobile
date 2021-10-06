@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView } from 'react-native';
 import api from '../services/api';
 import { Button, DataTable } from 'react-native-paper';
-import variaveis from '../services/variaveis';
+import { API_URL } from 'react-native-dotenv';
 
 const Anuncio = ({ route, navigation }) => {
 
@@ -23,6 +23,9 @@ const Anuncio = ({ route, navigation }) => {
         setAnuncio(res.data[0])
         api.patch(`anuncios/${itemId}/numvisitas`, { contagem: res.data[0].numVisitas + 1 })
       })
+      .catch(e => {
+        console.log("Erro ao coletar anúncio pelo seu id")
+      })
   }, [navigation, itemId])
 
   return (
@@ -31,7 +34,7 @@ const Anuncio = ({ route, navigation }) => {
         <Image
           style={styles.img}
           source={{
-            uri: `${(anuncio.urlImage) ? anuncio.urlImage : variaveis.serverUrl + "images/sem_foto.png"}`
+            uri: `${(anuncio.urlImage) ? anuncio.urlImage : API_URL + "images/sem_foto.png"}`
           }}
         />
         <Text style={styles.textSecao}>Informações do anúncio</Text>

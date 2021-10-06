@@ -1,15 +1,18 @@
 import { useIsFocused } from '@react-navigation/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
-import { Badge, Button, Chip, Divider, List, Menu, Provider, Snackbar } from 'react-native-paper';
+import { Button, List, Snackbar } from 'react-native-paper';
 import Alerta from '../components/Alerta';
 import MenuContexto from '../components/MenuContexto';
 import api from '../services/api';
-import variaveis from '../services/variaveis';
 import * as DocumentPicker from 'expo-document-picker';
 import ProgressoUpload from '../components/ProgressoUpload';
+import { API_URL } from 'react-native-dotenv';
+import MenuFoto from '../components/MenuFoto';
 
 const PainelAnuncios = ({ navigation, route }) => {
+
+  const refRBSheet = useRef();
 
   const [renderizar, setRenderizar] = useState(0);
   const [anuncios, setAnuncios] = useState();
@@ -26,23 +29,71 @@ const PainelAnuncios = ({ navigation, route }) => {
   const [status, setStatus] = useState("")
   const [type, setType] = useState("")
   const [apiUrl, setApiUrl] = useState("")
+  const [anuncioId, setAnuncioId] = useState("")
+  // let anuncioId;
+
+  const [imagem, setImagem] = useState(false);
+
+  const onDismissSnackBar = () => setVisible(false);
 
   useEffect(() => {
     setIsLoading(false)
   }, [isFocused])
 
-  const inserirFoto = async (item) => {
+  const abrirMenuFoto = (item) => {
+    setAnuncioId(item._id)
+    setImagem(item.urlImage)
+    refRBSheet.current.open()
+  }
+
+  const visualizar = () => {
+    refRBSheet.current.close();
+    navigation.navigate("Visualizador", {
+      imagem: imagem
+    })
+  }
+
+  const inserirFoto = async () => {
+    let result;
     await DocumentPicker.getDocumentAsync({
       copyToCacheDirectory: false
     })
       .then(file => {
-        setFile(file)
-        setStatus("Enviando foto...")
-        setType("image/jpeg")
-        setApiUrl(`anuncios/${item._id}`)
+        if (file.type == 'success') {
+          result = "success"
+          setFile(file)
+          setStatus("Enviando foto...")
+          setType("image/jpeg")
+          setApiUrl(`anuncios/${anuncioId}`)
+        } else {
+          return
+        }
+      })
+      .catch(e => {
+        console.log("Erro ao coletar arquivo")
       })
       .finally(() => {
-        setIsLoading(true)
+        if (result == "success") {
+          setIsLoading(true)
+        }
+      })
+  }
+
+  const deletarFoto = async () => {
+    refRBSheet.current.close();
+    await api.patch(`anuncios/${anuncioId}`, { deletarFoto: true })
+      .then(res => {
+        navigation.navigate("Painel de Anúncios", {
+          mensagem: res.data.message
+        })
+      })
+      .catch(e => {
+        navigation.navigate("Painel de Anúncios", {
+          mensagem: e.message
+        })
+      })
+      .finally(() => {
+        setVisible(true)
         setRenderizar(renderizar + 1)
       })
   }
@@ -56,6 +107,9 @@ const PainelAnuncios = ({ navigation, route }) => {
         setContadorPagina(contadorPagina + 10)
         setAnuncios(slice)
       })
+      .catch(e => {
+        console.log("Erro ao coletar anúncios do usuário")
+      })
   }, [isFocused])
 
   useEffect(() => {
@@ -66,6 +120,9 @@ const PainelAnuncios = ({ navigation, route }) => {
         setContadorPagina(30)
         setAnuncios(slice)
       })
+      .catch(e => {
+        console.log("Erro ao coletar anúncios do usuário")
+      })
       .finally(() => {
         setIsLoading(false)
       })
@@ -73,15 +130,18 @@ const PainelAnuncios = ({ navigation, route }) => {
 
 
   const trocarPagina = async () => {
-    await api("anuncios/userid")
-      .then(r => {
-        const slice = r.data.anuncio.slice(0, contadorPagina);
-        setContadorPagina(contadorPagina + 10)
-        setAnuncios(slice)
-      })
+    if (anuncios.length < numAnuncios) {
+      await api("anuncios/userid")
+        .then(r => {
+          const slice = r.data.anuncio.slice(0, contadorPagina);
+          setContadorPagina(contadorPagina + 10)
+          setAnuncios(slice)
+        })
+        .catch(e => {
+          console.log("Erro ao coletar anúncios do usuário")
+        })
+    }
   }
-
-  const onDismissSnackBar = () => setVisible(false);
 
   if (isLoading) {
     return (
@@ -94,6 +154,8 @@ const PainelAnuncios = ({ navigation, route }) => {
         status={status}
         type={type}
         apiUrl={apiUrl}
+        renderizar={renderizar}
+        setRenderizar={setRenderizar}
       />
     )
   }
@@ -108,6 +170,12 @@ const PainelAnuncios = ({ navigation, route }) => {
         {mensagem}
       </Snackbar>
       {/* <Alerta mensagem={mensagem} visible={visible} setVisible={setVisible} /> */}
+      <MenuFoto
+        refRBSheet={refRBSheet}
+        visualizar={visualizar}
+        deletarFoto={deletarFoto}
+        inserirFoto={inserirFoto}
+      />
       <FlatList
         data={anuncios}
         onEndReachedThreshold={1}
@@ -143,11 +211,11 @@ const PainelAnuncios = ({ navigation, route }) => {
         renderItem={({ item }) => (
           <List.Item
             left={() =>
-              <TouchableOpacity onPress={() => { inserirFoto(item) }}>
+              <TouchableOpacity onPress={() => { abrirMenuFoto(item) }}>
                 <Image
                   style={styles.tinyLogo}
                   source={{
-                    uri: `${(item.urlImage) ? item.urlImage : variaveis.serverUrl + "images/inserir_foto.png"}`
+                    uri: `${(item.urlImage) ? item.urlImage : API_URL + "images/inserir_foto.png"}`
                   }}
                 />
               </TouchableOpacity>
@@ -279,7 +347,13 @@ const styles = StyleSheet.create({
     // padding: 5,
     // paddingLeft: 10,
     // paddingRight: 10,
-  }
+  },
+  exemplo: {
+    width: "100%",
+    height: 200,
+    resizeMode: "contain",
+    alignItems: "flex-start"
+  },
 });
 
 export default PainelAnuncios;

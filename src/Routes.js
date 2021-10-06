@@ -16,6 +16,7 @@ import AlterarDadosAnuncio from './screens/AlterarDadosAnuncio';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { BackHandler } from 'react-native';
+import Visualizador from './screens/Visualizador';
 
 const Routes = () => {
   const Drawer = createDrawerNavigator();
@@ -65,6 +66,7 @@ const Routes = () => {
         <Drawer.Screen name="Cadastro de Usuário" component={CadastroUsuario} options={drawerOptions} />
         <Drawer.Screen name="Painel do Usuário" component={PainelUsuario} options={drawerOptions} initialParams={{ mensagem: "", visibilidade: false }} />
         <Drawer.Screen name="Alterar Dados do Anúncio" component={AlterarDadosAnuncio} options={drawerOptions} />
+        <Drawer.Screen name="Visualizador" component={Visualizador} options={drawerOptions} initialParams={{ imagem: "" }} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

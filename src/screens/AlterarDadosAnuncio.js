@@ -1,12 +1,8 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, SafeAreaView } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { View, StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import api from '../services/api';
-import { setToken } from '../services/tokenService';
-import DropDown from "react-native-paper-dropdown";
-import axios from 'axios';
 
 const AlterarDadosAnuncio = ({ navigation, route }) => {
   const isFocused = useIsFocused();
@@ -33,6 +29,9 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
         setVeiculoMarca(res.data[0].veiculoMarca)
         setVeiculoValor(res.data[0].veiculoValor)
       })
+      .catch(e => {
+        console.log("Erro ao coletar anúncio pelo seu id")
+      })
   }, [navigation, itemId])
 
   const salvar = async () => {
@@ -53,7 +52,7 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
       })
       .catch(e => {
         navigation.navigate("Painel de Anúncios", {
-          mensagem: e.data.error.message,
+          mensagem: e.message,
           visibilidade: true
         })
       })

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, Linking } from 'react-native';
+import { Text, StyleSheet, Linking, ScrollView } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { List, Button } from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { ScrollView } from 'react-native-gesture-handler';
-import variaveis from '../services/variaveis';
 import ProgressoUpload from '../components/ProgressoUpload';
 import { useIsFocused } from '@react-navigation/core';
+import { API_URL } from 'react-native-dotenv';
 
 const InserirAnuncio = ({ navigation, route }) => {
 
@@ -27,19 +26,24 @@ const InserirAnuncio = ({ navigation, route }) => {
       copyToCacheDirectory: false
     })
       .then(file => {
-        setFile(file)
-        setStatus("Cadastrando anúncio(s)...")
-        setType("text/csv")
-        setApiUrl("anuncios")
+        if (file.type == 'success') {
+          setFile(file)
+          setStatus("Cadastrando anúncio(s)...")
+          setType("text/csv")
+          setApiUrl("anuncios")
+          setIsLoading(true)
+        } else {
+          return
+        }
       })
-      .finally(() => {
-        setIsLoading(true)
+      .catch(e => {
+        console.log("Erro ao coletar arquivo")
       })
   }
 
   const imagens = [
     {
-      url: variaveis.serverUrl + "images/template_anuncio.png"
+      url: API_URL + "images/template_anuncio.png"
     }
   ]
 
@@ -48,8 +52,8 @@ const InserirAnuncio = ({ navigation, route }) => {
       <ProgressoUpload
         navigation={navigation}
         route={route}
-        requestName = "file"
-        httpMethod = "post"
+        requestName="file"
+        httpMethod="post"
         file={file}
         status={status}
         type={type}
@@ -74,7 +78,7 @@ const InserirAnuncio = ({ navigation, route }) => {
       <ImageViewer
         renderIndicator={() => <Text></Text>}
         style={styles.exemplo}
-        urlImages={imagens}
+        imageUrls={imagens}
       />
       <List.Item
         title="Passo 2"

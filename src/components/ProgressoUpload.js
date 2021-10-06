@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { useIsFocused } from '@react-navigation/core';
 import { View, Text, StyleSheet } from 'react-native';
 import api from '../services/api';
-import { ActivityIndicator, ProgressBar } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 const ProgressoUpload = (props) => {
 
@@ -27,6 +26,12 @@ const ProgressoUpload = (props) => {
             visibilidade: true
           });
         })
+        .finally(() => {
+          try {
+            props.setRenderizar(props.renderizar + 1)
+          } catch (e) {
+          }
+        })
     } else {
       api.patch(props.apiUrl, data)
         .then(res => {
@@ -40,6 +45,12 @@ const ProgressoUpload = (props) => {
             mensagem: e.message,
             visibilidade: true
           });
+        })
+        .finally(() => {
+          try {
+            props.setRenderizar(props.renderizar + 1)
+          } catch (e) {
+          }
         })
     }
   }, [])

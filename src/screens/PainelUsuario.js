@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import api from '../services/api';
-import { Button, DataTable, Modal, Portal, TextInput } from 'react-native-paper';
+import { Button, DataTable, Modal, Portal } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/core';
 import { clearToken, getToken } from '../services/tokenService';
 import Alerta from '../components/Alerta';
@@ -26,9 +26,9 @@ const PainelUsuario = ({ route, navigation }) => {
   const [usuario, setUsuario] = useState({
     nomeUser: "",
     apelidoUser: "",
-    cpfUser: 0,
-    cnpjUser: 0,
-    telefoneUser: 0,
+    cpfUser: "",
+    cnpjUser: "",
+    telefoneUser: "",
     emailUser: "",
     enderecoUser: {
       logradouro: "",
@@ -117,7 +117,7 @@ const PainelUsuario = ({ route, navigation }) => {
         <DataTable.Row>
           <View>
             <Text style={styles.textDetalhe}>CNPJ/CPF</Text>
-            <Text style={styles.text}>{usuario.cpfUser || usuario.cnpjUser}</Text>
+            <Text style={styles.text}>{(usuario.cpfUser.length > 0) ? usuario.cpfUser : usuario.cnpjUser}</Text>
           </View>
         </DataTable.Row>
         <DataTable.Row>

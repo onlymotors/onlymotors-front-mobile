@@ -1,13 +1,10 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, SafeAreaView } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { View, StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
-import api from '../services/api';
-import { setToken } from '../services/tokenService';
 import DropDown from "react-native-paper-dropdown";
 import axios from 'axios';
-import variaveis from '../services/variaveis';
+import { API_URL } from 'react-native-dotenv';
 import Alerta from '../components/Alerta';
 
 const AlterarDados = ({ navigation, route }) => {
@@ -31,9 +28,7 @@ const AlterarDados = ({ navigation, route }) => {
   const [bairro, setBairro] = useState("");
   const [cidade, setCidade] = useState("");
   const [uf, setUf] = useState("");
-  const [estados, setEstados] = useState([{
-    value: ""
-  }]);
+  const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
 
   const [senhaAtual, setSenhaAtual] = useState(senha);
@@ -46,7 +41,7 @@ const AlterarDados = ({ navigation, route }) => {
   useEffect(() => {
     setIsLoading(true)
     obterEstados()
-    axios(`${variaveis.serverUrl}users/userid`, { headers: { "Authorization": `Bearer ${token}` } })
+    axios(`${API_URL}users/userid`, { headers: { "Authorization": `Bearer ${token}` } })
       .then(res => {
         setTelefone(res.data[0].telefoneUser)
         setCep(res.data[0].enderecoUser.cep)
@@ -57,6 +52,9 @@ const AlterarDados = ({ navigation, route }) => {
         setCidade(res.data[0].enderecoUser.cidade)
         setUf(res.data[0].enderecoUser.uf)
         setStatusCadastro(res.data[0].statusCadastro)
+      })
+      .catch(e => {
+        console.log("Erro ao coletar usuário")
       })
   }, [isFocused])
 
@@ -106,7 +104,7 @@ const AlterarDados = ({ navigation, route }) => {
       dados.senhaAtual = senhaAtual
     }
     if (!statusCadastro) {
-      axios.patch(`${variaveis.serverUrl}users/userid`, dados, {
+      axios.patch(`${API_URL}users/userid`, dados, {
         headers: { "Authorization": `Bearer ${token}` }
       })
         .then(res => {
@@ -122,7 +120,7 @@ const AlterarDados = ({ navigation, route }) => {
           })
         })
     } else {
-      axios.patch(`${variaveis.serverUrl}users/userid`, dados, {
+      axios.patch(`${API_URL}users/userid`, dados, {
         headers: { "Authorization": `Bearer ${token}` }
       })
         .then(res => {
