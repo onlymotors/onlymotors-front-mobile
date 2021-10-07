@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon2.png",
         "backgroundColor": "#21282B"
-      }
+      },
+      "package": "com.onlymotors.onlymotors"
     },
     "web": {
       "favicon": "./assets/favicon2.png"

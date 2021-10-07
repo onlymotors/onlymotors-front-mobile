@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import api from '../services/api';
 import { Button, DataTable } from 'react-native-paper';
 import { API_URL } from 'react-native-dotenv';
@@ -28,15 +28,23 @@ const Anuncio = ({ route, navigation }) => {
       })
   }, [navigation, itemId])
 
+  const visualizar = () => {
+    navigation.navigate("Visualizador", {
+      imagem: anuncio.urlImage
+    })
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Image
-          style={styles.img}
-          source={{
-            uri: `${(anuncio.urlImage) ? anuncio.urlImage : API_URL + "images/sem_foto.png"}`
-          }}
-        />
+        <TouchableOpacity onPress={() => { visualizar() }}>
+          <Image
+            style={styles.img}
+            source={{
+              uri: `${(anuncio.urlImage) ? anuncio.urlImage : API_URL + "images/sem_foto.png"}`
+            }}
+          />
+        </TouchableOpacity>
         <Text style={styles.textSecao}>Informações do anúncio</Text>
         <DataTable.Row>
           <View>

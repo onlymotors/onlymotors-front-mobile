@@ -238,16 +238,15 @@ const PainelAnuncios = ({ navigation, route }) => {
             }
             title={
               (item.statusAnuncio)
-                ? <View><View style={styles.badgePublicado}><Text style={styles.textoPulicado}>Publicado</Text></View><Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text></View>
-                : <View><View style={styles.badgePausado}><Text style={styles.textoPausado}>Pausado</Text></View><Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text></View>}
+                ? <View><View style={styles.badgePublicado}><Text style={styles.textoPulicado}>Publicado</Text></View></View>
+                : <View><View style={styles.badgePausado}><Text style={styles.textoPausado}>Pausado</Text></View></View>}
             description={
               < View >
-                {/* <Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text> */}
+                <Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text>
                 <Text>Visitas: <Text style={styles.numeroNegrito}>{item.numVisitas}</Text>   Contatos: <Text style={styles.numeroNegrito}>{item.numContatos}</Text></Text>
                 <Text style={styles.listPreco}>{item.veiculoValor}</Text>
               </View >
             }
-            descriptionNumberOfLines={2}
           />
         )}
       />
