@@ -31,7 +31,7 @@ const AlterarDados = ({ navigation, route }) => {
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
 
-  const [senhaAtual, setSenhaAtual] = useState(senha);
+  const [senhaAtual, setSenhaAtual] = useState("");
   const [senhaNova, setSenhaNova] = useState("");
   const [verificaSenha, setVerificaSenha] = useState("");
 
@@ -39,6 +39,7 @@ const AlterarDados = ({ navigation, route }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    setSenhaAtual(senha)
     setIsLoading(true)
     obterEstados()
     axios(`${API_URL}users/userid`, { headers: { "Authorization": `Bearer ${token}` } })
@@ -108,12 +109,14 @@ const AlterarDados = ({ navigation, route }) => {
         headers: { "Authorization": `Bearer ${token}` }
       })
         .then(res => {
+          resetParams()
           navigation.navigate('Login', {
             mensagem: res.data.message,
             visibilidade: true
           })
         })
         .catch(e => {
+          resetParams()
           navigation.navigate('Login', {
             mensagem: e.message,
             visibilidade: true
@@ -124,12 +127,14 @@ const AlterarDados = ({ navigation, route }) => {
         headers: { "Authorization": `Bearer ${token}` }
       })
         .then(res => {
+          resetParams()
           navigation.navigate('Painel do Usuário', {
             mensagem: res.data.message,
             visibilidade: true
           })
         })
         .catch(e => {
+          resetParams()
           navigation.navigate('Painel do Usuário', {
             mensagem: e.message,
             visibilidade: true
@@ -217,6 +222,23 @@ const AlterarDados = ({ navigation, route }) => {
       })
   }
 
+  const resetParams = () => {
+    setSenhaAtual("")
+    setSenhaNova("")
+    setVerificaSenha("")
+    navigation.setParams({
+      token:
+        route.params.token = "",
+      senha:
+        route.params.senha = ""
+    })
+  }
+
+  const reset = () => {
+    setVisible(false);
+    resetParams()
+  }
+
   if (isLoading) {
     return (
       <SafeAreaView style={styles.containerIsLoading}>
@@ -227,8 +249,7 @@ const AlterarDados = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Alerta mensagem={mensagem} visible={visible} setVisible={setVisible}
-      />
+      <Alerta mensagem={mensagem} visible={visible} reset={reset} navigation={navigation} />
       <ScrollView>
         <Text style={styles.textSubSecao}>Troque sua senha</Text>
         <View style={styles.inputContainer}>

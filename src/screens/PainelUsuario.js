@@ -59,12 +59,14 @@ const PainelUsuario = ({ route, navigation }) => {
     await api.delete(`users/userid`)
       .then(res => {
         clearToken()
+        resetParams()
         navigation.navigate('Only Motors', {
           mensagem: res.data.message,
           visibilidade: true
         });
       })
       .catch(e => {
+        resetParams()
         navigation.navigate('Painel do Usuário', {
           mensagem: e.message,
           visibilidade: true
@@ -72,9 +74,23 @@ const PainelUsuario = ({ route, navigation }) => {
       })
   }
 
+  const resetParams = () => {
+    navigation.setParams({
+      mensagem:
+        route.params.mensagem = undefined,
+      visibilidade:
+        route.params.visibilidade = false
+    })
+  }
+
+  const reset = () => {
+    setVisible(false);
+    resetParams()
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <Alerta mensagem={mensagem} visible={visible} setVisible={setVisible} />
+      <Alerta mensagem={mensagem} visible={visible} reset={reset} navigation={navigation} />
       <ScrollView>
         <Portal>
           <Modal
@@ -196,6 +212,7 @@ const PainelUsuario = ({ route, navigation }) => {
             labelStyle={{ color: "white" }}
             style={styles.botao}
             onPress={() => {
+              resetParams()
               navigation.navigate('Alterar Dados Cadastrais', {
                 token: token,
               })

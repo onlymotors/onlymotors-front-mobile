@@ -27,13 +27,19 @@ const Login = ({ navigation, route }) => {
       .then(res => {
         if (res.data.statusCadastro === true) {
           setToken(res.data.token)
+          setEmail("")
+          setSenha("")
+          resetParams()
           navigation.navigate('Only Motors')
         }
         else {
+          resetParams()
           navigation.navigate('Alterar Dados Cadastrais', {
             token: res.data.token,
             senha: senha
           })
+          setEmail("")
+          setSenha("")
         }
       })
       .catch(e => {
@@ -42,9 +48,23 @@ const Login = ({ navigation, route }) => {
       })
   }
 
+  const resetParams = () => {
+    navigation.setParams({
+      mensagem:
+        route.params.mensagem = "",
+      visibilidade:
+        route.params.visibilidade = false
+    })
+  }
+
+  const reset = () => {
+    setVisible(false);
+    resetParams()
+  }
+
   return (
     <View>
-      <Alerta mensagem={mensagem} visible={visible} setVisible={setVisible} />
+      <Alerta mensagem={mensagem} visible={visible} reset={reset} navigation={navigation} />
       <View style={styles.inputContainerTop}>
         <TextInput
           label="E-mail"
@@ -76,7 +96,7 @@ const Login = ({ navigation, route }) => {
         Não possui uma conta?
         <Text
           style={{ color: "#FF7D04", fontWeight: "700" }}
-          onPress={() => navigation.navigate('Cadastro de Usuário')}
+          onPress={() => { resetParams(); navigation.navigate('Cadastro de Usuário') }}
         > Clique aqui</Text>
         .
       </Text>

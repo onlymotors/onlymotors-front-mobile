@@ -45,9 +45,23 @@ const Home = ({ route, navigation }) => {
     }
   }
 
+  const resetParams = () => {
+    navigation.setParams({
+      mensagem:
+        route.params.mensagem = "",
+      visibilidade:
+        route.params.visibilidade = false
+    })
+  }
+
+  const reset = () => {
+    setVisible(false);
+    resetParams()
+  }
+
   return (
     <SafeAreaView>
-      <Alerta mensagem={mensagem} visible={visible} setVisible={setVisible} />
+      <Alerta mensagem={mensagem} visible={visible} reset={reset} navigation={navigation} />
       <FlatList
         data={anuncios}
         onEndReachedThreshold={1}
@@ -75,6 +89,7 @@ const Home = ({ route, navigation }) => {
             }
             descriptionNumberOfLines={2}
             onPress={() => {
+              resetParams()
               navigation.navigate('Anúncio', {
                 itemId: item._id,
               });

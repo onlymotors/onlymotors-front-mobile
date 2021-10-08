@@ -34,8 +34,6 @@ const PainelAnuncios = ({ navigation, route }) => {
 
   const [imagem, setImagem] = useState(false);
 
-  const onDismissSnackBar = () => setVisible(false);
-
   useEffect(() => {
     setIsLoading(false)
   }, [isFocused])
@@ -48,6 +46,7 @@ const PainelAnuncios = ({ navigation, route }) => {
 
   const visualizar = () => {
     refRBSheet.current.close();
+    resetParams();
     navigation.navigate("Visualizador", {
       imagem: imagem
     })
@@ -83,11 +82,13 @@ const PainelAnuncios = ({ navigation, route }) => {
     refRBSheet.current.close();
     await api.patch(`anuncios/${anuncioId}`, { deletarFoto: true })
       .then(res => {
+        resetParams()
         navigation.navigate("Painel de Anúncios", {
           mensagem: res.data.message
         })
       })
       .catch(e => {
+        resetParams()
         navigation.navigate("Painel de Anúncios", {
           mensagem: e.message
         })
@@ -143,6 +144,20 @@ const PainelAnuncios = ({ navigation, route }) => {
     }
   }
 
+  const resetParams = () => {
+    navigation.setParams({
+      mensagem:
+        route.params.mensagem = "",
+      visibilidade:
+        route.params.visibilidade = false
+    })
+  }
+
+  const reset = () => {
+    setVisible(false);
+    resetParams()
+  }
+
   if (isLoading) {
     return (
       <ProgressoUpload
@@ -165,7 +180,7 @@ const PainelAnuncios = ({ navigation, route }) => {
       <Snackbar
         visible={visible}
         duration={3000}
-        onDismiss={onDismissSnackBar}
+        onDismiss={reset}
       >
         {mensagem}
       </Snackbar>
@@ -189,7 +204,7 @@ const PainelAnuncios = ({ navigation, route }) => {
                 mode="contained"
                 color="#FF7D04"
                 labelStyle={{ color: "white", fontSize: 12 }}
-                onPress={() => { navigation.navigate("Inserir Anúncio") }}
+                onPress={() => { resetParams(); navigation.navigate("Inserir Anúncio") }}
                 style={styles.botao}
               >
                 Inserir Anúncio
@@ -241,12 +256,15 @@ const PainelAnuncios = ({ navigation, route }) => {
                 ? <View><View style={styles.badgePublicado}><Text style={styles.textoPulicado}>Publicado</Text></View></View>
                 : <View><View style={styles.badgePausado}><Text style={styles.textoPausado}>Pausado</Text></View></View>}
             description={
-              < View >
-                <Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text>
-                <Text>Visitas: <Text style={styles.numeroNegrito}>{item.numVisitas}</Text>   Contatos: <Text style={styles.numeroNegrito}>{item.numContatos}</Text></Text>
-                <Text style={styles.listPreco}>{item.veiculoValor}</Text>
-              </View >
+              <>
+                  <View><Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text></View>
+                  <View><Text>Visitas: <Text style={styles.numeroNegrito}>{item.numVisitas}</Text>   Contatos: <Text style={styles.numeroNegrito}>{item.numContatos}</Text></Text></View>
+                  <View><Text style={styles.listPreco}>{item.veiculoValor}</Text></View>
+               
+              </>
+              
             }
+            descriptionNumberOfLines={5}
           />
         )}
       />
