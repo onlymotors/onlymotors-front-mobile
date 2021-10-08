@@ -38,20 +38,26 @@ $ npm install --global expo-cli
 </ul>
 
 <ul>
-<li><b>Execute a aplicação</b></li>
+<li><b>Criação das Variáveis</b></li>
 <ul>
-<li>Altere o endereço do Back-End na linha 2 no arquivo <b>./src/services/variaveis.js</b>:
+<li>Crie um arquivo <b>.env</b> e configure o endereço do Back-End:
 <br/>
 
 
 ```bash
-2 serverUrl: 'endereco_do_back_end'
+API_URL='endereco_do_back_end'
 ```
 
 <b>Obs:</b> Se ambas as aplicações forem executadas na mesma rede, o endereço do Back-End deve ser o IP do computador naquela rede.
 <br/>
 
 </li>
+</ul>
+</ul>
+
+<ul>
+<li><b>Execute a aplicação</b></li>
+<ul>
 <li>Abra o terminal na raiz desse repositório e execute o comando:
 <br/>
 
@@ -62,4 +68,3 @@ $ expo start
 </li>
 </ul>
 </ul>
-
