@@ -14,8 +14,6 @@ import BarraNavegacao from './components/BarraNavegacao';
 import { NavigationContainer } from '@react-navigation/native';
 import AlterarDadosAnuncio from './screens/AlterarDadosAnuncio';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
-import { BackHandler } from 'react-native';
 import Visualizador from './screens/Visualizador';
 import Chat from './screens/Chat';
 import ChatRoom from './screens/ChatRoom';
