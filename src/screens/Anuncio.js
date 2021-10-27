@@ -3,8 +3,11 @@ import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, TouchableOpaci
 import api from '../services/api';
 import { Button, DataTable } from 'react-native-paper';
 import { API_URL } from 'react-native-dotenv';
+import { getChatRooms } from '../services/chatService';
+import { getToken } from '../services/tokenService';
 
 const Anuncio = ({ route, navigation }) => {
+
 
   const { itemId } = route.params;
   const [anuncio, setAnuncio] = useState({
@@ -18,6 +21,8 @@ const Anuncio = ({ route, navigation }) => {
   });
 
   useEffect(() => {
+
+
     api(`anuncios/${itemId}`)
       .then(res => {
         setAnuncio(res.data[0])
@@ -33,6 +38,60 @@ const Anuncio = ({ route, navigation }) => {
       imagem: anuncio.urlImage
     })
   }
+
+
+
+
+
+  const criarChatRoom = async () => {
+
+    let tkn;
+    getToken()
+      .then(res => {
+        tkn = res
+
+      })
+      .catch(e => {
+        console.log("Erro ao coletar o token")
+      })
+
+    try {
+      let res = await api.get(`chatrooms/userid`)
+      let lista = res.data
+      let found = lista.find(item => (item.anuncioId._id === itemId))
+      if (found) {
+        navigation.navigate("Chat Room", {
+          chatRoomId: found._id,
+          token: tkn
+        })
+      } else {
+        let dados = {
+          anuncioId: itemId,
+          nomeChatRoom: `${anuncio.veiculoMarca} ${anuncio.descricaoVeiculo} - ${anuncio.anoModelo}`
+        }
+        let chatRoom = await api.post(`chatrooms`, dados)
+        console.log(chatRoom)
+        console.log(tkn)
+        navigation.navigate("Chat Room", {
+          chatRoomId: chatRoom.chatRoomId,
+          token: tkn
+        })
+        // api.post(`chatrooms`, dados)
+        //   .then(res => {
+        //     navigation.navigate("Chat Room", {
+        //       chatRoomId: res.data.chatRoomId,
+        //       token: tkn
+        //     })
+        //   })
+        //   .catch(e => {
+        //     console.log(e.response.data)
+        //   })
+      }
+    } catch (e) {
+      return console.log("O usuário não está logado")
+    }
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,6 +147,7 @@ const Anuncio = ({ route, navigation }) => {
           color="#FF7D04"
           labelStyle={{ color: "white" }}
           style={styles.botao}
+          onPress={() => criarChatRoom()}
         >
           Mensagem
         </Button>
