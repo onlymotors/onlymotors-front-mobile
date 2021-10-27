@@ -17,6 +17,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { BackHandler } from 'react-native';
 import Visualizador from './screens/Visualizador';
+import Chat from './screens/Chat';
+import ChatRoom from './screens/ChatRoom';
 
 const Routes = () => {
   const Drawer = createDrawerNavigator();
@@ -59,7 +61,8 @@ const Routes = () => {
         <Drawer.Screen name="Only Motors" component={Home} options={drawerOptions} initialParams={{ mensagem: "", visibilidade: false }} />
         <Drawer.Screen name="Login" component={Login} options={drawerOptions} initialParams={{ mensagem: "", visibilidade: false }} />
         <Drawer.Screen name="Painel de Anúncios" component={PainelAnuncios} options={drawerOptions} initialParams={{ mensagem: "", visibilidade: false }} />
-        <Drawer.Screen name="Chat" component={Login} options={drawerOptions} />
+        <Drawer.Screen name="Chat" component={Chat} options={drawerOptions} />
+        <Drawer.Screen name="Chat Room" component={ChatRoom} options={drawerOptions} initialParams={{ chatRoomId: "", token: "" }} />
         <Drawer.Screen name="Inserir Anúncio" component={InserirAnuncio} options={drawerOptions} />
         <Drawer.Screen name="Anúncio" component={Anuncio} options={drawerOptions} />
         <Drawer.Screen name="Alterar Dados Cadastrais" component={AlterarDados} options={drawerOptions} initialParams={{ token: "", senha: "" }} />
