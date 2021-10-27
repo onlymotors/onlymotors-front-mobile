@@ -1,5 +1,6 @@
 import io from 'socket.io-client';
 import { getToken } from './tokenService';
+import { API_URL } from 'react-native-dotenv';
 
 let socket;
 let token;
@@ -14,7 +15,7 @@ console.log(token)
 
 export const initiateSocket = (room) => {
 
-  socket = io('http://localhost:3333/chat', {
+  socket = io(`${API_URL}chat`, {
     extraHeaders: { "Authorization": `Bearer ${token}` },
     // transports: ['websocket'],
     jsonp: false
