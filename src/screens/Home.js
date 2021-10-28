@@ -2,9 +2,8 @@ import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { List } from 'react-native-paper';
-import api from '../services/api';
+import api, { API_URL } from '../services/api';
 import Alerta from '../components/Alerta';
-import { API_URL } from 'react-native-dotenv';
 
 const Home = ({ route, navigation }) => {
 
@@ -84,7 +83,14 @@ const Home = ({ route, navigation }) => {
             description={
               <View>
                 <Text>{item.anoModelo}</Text>
-                <Text style={styles.listPreco}>{item.veiculoValor}</Text>
+                <Text style={styles.listPreco}>
+                  {
+                    Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(item.veiculoValor)
+                  }
+                </Text>
               </View>
             }
             descriptionNumberOfLines={2}

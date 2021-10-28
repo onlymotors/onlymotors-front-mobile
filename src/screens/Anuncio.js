@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
-import api from '../services/api';
+import api, { API_URL } from '../services/api';
 import { Button, DataTable } from 'react-native-paper';
-import { API_URL } from 'react-native-dotenv';
 import { getChatRooms } from '../services/chatService';
 import { getToken } from '../services/tokenService';
 
@@ -16,7 +15,7 @@ const Anuncio = ({ route, navigation }) => {
     descricaoVeiculo: "",
     nomeFabricante: "",
     veiculoMarca: "",
-    veiculoValor: "",
+    veiculoValor: 0,
     urlImage: ""
   });
 
@@ -138,7 +137,14 @@ const Anuncio = ({ route, navigation }) => {
         <DataTable.Row>
           <View>
             <Text style={styles.textDetalhe}>Valor do veículo</Text>
-            <Text style={styles.text}>{anuncio.veiculoValor}</Text>
+            <Text style={styles.text}>
+              {
+                Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(anuncio.veiculoValor)
+              }
+            </Text>
           </View>
         </DataTable.Row>
         <Text style={styles.textSecao}>Contatar anunciante:</Text>

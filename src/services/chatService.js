@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { getToken } from './tokenService';
-import { API_URL } from 'react-native-dotenv';
+import { API_URL } from '../services/api';
 
 let socket;
 let token;

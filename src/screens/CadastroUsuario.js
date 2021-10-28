@@ -3,7 +3,7 @@ import { Text, ScrollView, StyleSheet, Linking } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { Button, List } from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { API_URL } from 'react-native-dotenv';
+import { API_URL } from '../services/api';
 import { useIsFocused } from '@react-navigation/core';
 import ProgressoUpload from '../components/ProgressoUpload';
 
@@ -66,7 +66,7 @@ const CadastroUsuario = ({ navigation, route }) => {
     <ScrollView >
       <List.Item
         title="Passo 1"
-        description={<Text>Crie um arquivo.csv no seguinte formato. <Text style={{ color: "#FF7D04", fontWeight: "700" }} onPress={() => Linking.openURL('http://192.168.18.5:3333/download/template_usuario.csv')}>Clique aqui</Text> para baixar o template.</Text>}
+        description={<Text>Crie um arquivo.csv no seguinte formato. <Text style={{ color: "#FF7D04", fontWeight: "700" }} onPress={() => Linking.openURL('http://localhost:3333/:3333/download/template_usuario.csv')}>Clique aqui</Text> para baixar o template.</Text>}
       />
       <List.Item
         title="Exemplo CSV"

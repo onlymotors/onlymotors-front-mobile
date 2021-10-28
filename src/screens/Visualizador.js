@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { API_URL } from 'react-native-dotenv';
+import { API_URL } from '../services/api';
 
 const Visualizador = ({ navigation, route }) => {
 

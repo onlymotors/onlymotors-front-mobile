@@ -5,7 +5,7 @@ import { List, Button } from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ProgressoUpload from '../components/ProgressoUpload';
 import { useIsFocused } from '@react-navigation/core';
-import { API_URL } from 'react-native-dotenv';
+import { API_URL } from '../services/api';
 
 const InserirAnuncio = ({ navigation, route }) => {
 
@@ -66,7 +66,7 @@ const InserirAnuncio = ({ navigation, route }) => {
     <ScrollView >
       <List.Item
         title="Passo 1"
-        description={<Text>Crie um arquivo.csv no seguinte formato. <Text style={{ color: "#FF7D04", fontWeight: "700" }} onPress={() => Linking.openURL('http://192.168.18.5:3333/download/template_anuncio.csv')}>Clique aqui</Text> para baixar o template.</Text>}
+        description={<Text>Crie um arquivo.csv no seguinte formato. <Text style={{ color: "#FF7D04", fontWeight: "700" }} onPress={() => Linking.openURL('http://localhost:3333/:3333/download/template_anuncio.csv')}>Clique aqui</Text> para baixar o template.</Text>}
       />
       <List.Item
         title="Exemplo CSV"

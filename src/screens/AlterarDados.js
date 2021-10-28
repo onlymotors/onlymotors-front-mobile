@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
 import DropDown from "react-native-paper-dropdown";
 import axios from 'axios';
-import { API_URL } from 'react-native-dotenv';
+import { API_URL } from '../services/api';
 import Alerta from '../components/Alerta';
 
 const AlterarDados = ({ navigation, route }) => {

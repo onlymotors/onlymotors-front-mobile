@@ -4,10 +4,9 @@ import { View, Text, Image, StyleSheet, FlatList, SafeAreaView, TouchableOpacity
 import { Button, List, Snackbar } from 'react-native-paper';
 import Alerta from '../components/Alerta';
 import MenuContexto from '../components/MenuContexto';
-import api from '../services/api';
+import api, { API_URL } from '../services/api';
 import * as DocumentPicker from 'expo-document-picker';
 import ProgressoUpload from '../components/ProgressoUpload';
-import { API_URL } from 'react-native-dotenv';
 import MenuFoto from '../components/MenuFoto';
 
 const PainelAnuncios = ({ navigation, route }) => {
@@ -257,12 +256,12 @@ const PainelAnuncios = ({ navigation, route }) => {
                 : <View><View style={styles.badgePausado}><Text style={styles.textoPausado}>Pausado</Text></View></View>}
             description={
               <>
-                  <View><Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text></View>
-                  <View><Text>Visitas: <Text style={styles.numeroNegrito}>{item.numVisitas}</Text>   Contatos: <Text style={styles.numeroNegrito}>{item.numContatos}</Text></Text></View>
-                  <View><Text style={styles.listPreco}>{item.veiculoValor}</Text></View>
-               
+                <View><Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text></View>
+                <View><Text>Visitas: <Text style={styles.numeroNegrito}>{item.numVisitas}</Text>   Contatos: <Text style={styles.numeroNegrito}>{item.numContatos}</Text></Text></View>
+                <View><Text style={styles.listPreco}>{Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", }).format(item.veiculoValor)}</Text></View>
+
               </>
-              
+
             }
             descriptionNumberOfLines={5}
           />

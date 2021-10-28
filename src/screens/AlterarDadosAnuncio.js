@@ -3,6 +3,28 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import api from '../services/api';
+import numeral from 'numeral';
+
+numeral.register('locale', 'pt', {
+  delimiters: {
+    thousands: '.',
+    decimal: ','
+  },
+  abbreviations: {
+    thousand: 'mil',
+    million: 'mi',
+    billion: 'bi',
+    trillion: 'tri'
+  },
+  ordinal: function (number) {
+    return '.º';
+  },
+  currency: {
+    symbol: 'R$'
+  }
+});
+
+numeral.locale('pt');
 
 const AlterarDadosAnuncio = ({ navigation, route }) => {
   const isFocused = useIsFocused();
@@ -18,6 +40,7 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
   const [nomeFabricante, setNomeFabricante] = useState("");
   const [veiculoMarca, setVeiculoMarca] = useState("");
   const [veiculoValor, setVeiculoValor] = useState("");
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     api(`anuncios/${itemId}`)
@@ -27,7 +50,7 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
         setDescricaoVeiculo(res.data[0].descricaoVeiculo)
         setNomeFabricante(res.data[0].nomeFabricante)
         setVeiculoMarca(res.data[0].veiculoMarca)
-        setVeiculoValor(res.data[0].veiculoValor)
+        mascararValor(res.data[0].veiculoValor)
       })
       .catch(e => {
         console.log("Erro ao coletar anúncio pelo seu id")
@@ -35,12 +58,13 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
   }, [navigation, itemId])
 
   const salvar = async () => {
+    let valor = Number(veiculoMarca.replace(".", "").replace(",", ".").replace(/[^\d.-]/g, ""))
     let dados = {
       anoFabricacao: parseInt(anoFabricacao),
       anoModelo: parseInt(anoModelo),
       descricaoVeiculo,
       nomeFabricante,
-      veiculoMarca,
+      veiculoMarca: valor,
       veiculoValor,
     }
     await api.patch(`anuncios/${itemId}`, dados)
@@ -57,6 +81,13 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
         })
       })
   }
+
+  const mascararValor = (value) => {
+    var number = numeral(value).format();
+    number = "R$ " + number
+    console.log(number)
+    setVeiculoValor(number);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -123,7 +154,7 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
             mode="outlined"
             keyboardType="numeric"
             value={veiculoValor}
-            onChangeText={e => setVeiculoValor(e)}
+            onChangeText={e => mascararValor(e)}
             outlineColor="lightgrey"
           />
         </View>

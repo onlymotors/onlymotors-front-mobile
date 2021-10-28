@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/core';
 import io from 'socket.io-client';
@@ -9,7 +9,7 @@ import {
   initiateSocket, disconnectSocket,
   subscribeToChat, sendMessage
 } from '../services/chatService';
-
+import { geradorRandomico } from '../services/geradores';
 
 const ChatRoom = ({ navigation, route }) => {
 
@@ -36,6 +36,7 @@ const ChatRoom = ({ navigation, route }) => {
     subscribeToChat((err, data) => {
       if (err) return;
       console.log(data)
+      data._id = geradorRandomico(15)
       setChat(oldChats => [...oldChats, data])
     });
     return () => {
@@ -75,8 +76,10 @@ const ChatRoom = ({ navigation, route }) => {
         console.log(e.message)
       })
   }
+
+
   return (
-    <View>
+    <ScrollView>
       {chat.map(chatMessage =>
         (email === chatMessage.emailUser)
           ?
@@ -102,7 +105,7 @@ const ChatRoom = ({ navigation, route }) => {
       >
         Enviar
       </Button>
-    </View >
+    </ScrollView >
   );
 }
 
