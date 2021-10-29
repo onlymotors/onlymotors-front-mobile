@@ -10,7 +10,7 @@ import { Drawer } from 'react-native-paper';
 import api from '../services/api';
 import { getToken, clearToken } from '../services/tokenService';
 
-const BarraNavegacao = (props) => {
+const DrawerBar = (props) => {
 
   const drawerOpen = useDrawerStatus()
   const [nomeUser, setNomeUser] = useState("")
@@ -56,7 +56,7 @@ const BarraNavegacao = (props) => {
         {/* <DrawerItemList {...props} /> */}
         <DrawerItem
           label="Página Inicial"
-          onPress={() => { props.navigation.navigate('Only Motors') }}
+          onPress={() => { props.navigation.navigate('Home') }}
         />
         <DrawerItem
           label="Painel de Anúncios"
@@ -72,7 +72,7 @@ const BarraNavegacao = (props) => {
         />
         <DrawerItem
           label="Sair"
-          onPress={() => { clearToken(); props.navigation.navigate('Only Motors'); }}
+          onPress={() => { clearToken(); props.navigation.navigate('Home'); }}
         />
       </DrawerContentScrollView>
     )
@@ -89,7 +89,7 @@ const BarraNavegacao = (props) => {
       </Drawer.Section>
       <DrawerItem
         label="Página Inicial"
-        onPress={() => { props.navigation.navigate('Only Motors') }}
+        onPress={() => { props.navigation.navigate('Home') }}
       />
       <DrawerItem
         label="Painel de Anúncios"
@@ -113,5 +113,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BarraNavegacao;
+export default DrawerBar;
 

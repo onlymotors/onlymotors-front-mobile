@@ -1,7 +1,8 @@
 
+import { NavigationContainer } from '@react-navigation/native';
 import * as React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import Routes from './src/Routes';
+import DrawerNavigator from './src/navigations/DrawerNavigator';
 
 const theme = {
   ...DefaultTheme,
@@ -18,7 +19,9 @@ const App = () => {
 
   return (
     <PaperProvider theme={theme}>
-      <Routes />
+      <NavigationContainer>
+        <DrawerNavigator />
+      </NavigationContainer>
     </PaperProvider>
   );
 };
