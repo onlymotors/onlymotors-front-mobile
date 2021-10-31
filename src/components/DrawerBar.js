@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList,
+  // DrawerItemList,
   useDrawerStatus
 } from '@react-navigation/drawer';
 import { Drawer } from 'react-native-paper';
@@ -15,7 +15,7 @@ const DrawerBar = (props) => {
   const drawerOpen = useDrawerStatus()
   const [nomeUser, setNomeUser] = useState("")
   const [token, setToken] = useState();
-  const [active, setActive] = React.useState('');
+  // const [active, setActive] = React.useState('');
 
   useEffect(() => {
     if (drawerOpen === "open") {

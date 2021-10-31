@@ -19,7 +19,7 @@ const CadastroUsuario = ({ navigation, route }) => {
 
   useEffect(() => {
     setIsLoading(false)
-  }, [isFocused])
+  }, [isFocused === true])
 
   const enviarUpload = async () => {
     await DocumentPicker.getDocumentAsync({

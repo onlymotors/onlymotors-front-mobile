@@ -9,7 +9,7 @@ const Visualizador = ({ navigation, route }) => {
 
   const imagens = [
     {
-      url: imagem || API_URL + "images/template_anuncio.png"
+      url: imagem || API_URL + "images/sem_foto.png"
     }
   ]
 

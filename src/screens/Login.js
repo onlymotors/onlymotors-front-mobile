@@ -19,7 +19,7 @@ const Login = ({ navigation, route }) => {
   useEffect(() => {
     setVisible(visibilidade)
     setMensagem(mensagemRecebida)
-  }, [isFocused]);
+  }, [isFocused === true]);
 
   const logar = () => {
     const data = { emailUser: email, senhaUser: senha }
@@ -30,7 +30,7 @@ const Login = ({ navigation, route }) => {
           setEmail("")
           setSenha("")
           resetParams()
-          navigation.navigate('Only Motors')
+          navigation.navigate('Home')
         }
         else {
           resetParams()
@@ -81,6 +81,7 @@ const Login = ({ navigation, route }) => {
           secureTextEntry={true}
           value={senha}
           onChangeText={e => setSenha(e)}
+          onSubmitEditing={() => logar()}
         />
       </View>
       <Button

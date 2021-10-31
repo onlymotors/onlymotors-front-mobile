@@ -9,9 +9,7 @@ getToken()
     token = res
   })
   .catch(e => {
-
   })
-console.log(token)
 
 export const initiateSocket = (room) => {
 

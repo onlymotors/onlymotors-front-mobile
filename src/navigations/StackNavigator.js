@@ -20,15 +20,15 @@ const Stack = createStackNavigator();
 const StackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Only Motors"
+      initialRouteName="Home"
       screenOptions={{
         header: (props) => <StackBar {...props} />,
       }}
     >
-      <Stack.Screen name="Only Motors" component={Home} initialParams={{ title: "Only Motors", mensagem: "", visibilidade: false }} />
+      {/* <Stack.Screen name="Página Inicial" component={Home} initialParams={{ title: "Only Motors", mensagem: "", visibilidade: false }} /> */}
       <Stack.Screen name="Home" component={Home} initialParams={{ title: "Only Motors", mensagem: "", visibilidade: false }} />
       <Stack.Screen name="Login" component={Login} initialParams={{ title: "Only Motors", mensagem: "", visibilidade: false }} />
-      <Stack.Screen name="Painel de Busca" component={Busca} initialParams={{ title: "Painel de Busca" }} />
+      <Stack.Screen name="Painel de Busca" component={Busca} options={{ headerMode: "float", headerShown: false }} initialParams={{ title: "Painel de Busca", anuncio: "testando" }} />
       <Stack.Screen name="Painel de Anúncios" component={PainelAnuncios} initialParams={{ title: "Painel de Anúncios", mensagem: "", visibilidade: false }} />
       <Stack.Screen name="Chat" component={Chat} initialParams={{ title: "Chat" }} />
       <Stack.Screen name="Chat Room" component={ChatRoom} initialParams={{ title: "Chat Room", chatRoomId: "", token: "" }} />

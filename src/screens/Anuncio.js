@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import api, { API_URL } from '../services/api';
 import { Button, DataTable } from 'react-native-paper';
-import { getChatRooms } from '../services/chatService';
 import { getToken } from '../services/tokenService';
+import numeral from '../services/formatador';
+import Alerta from '../components/Alerta';
 
 const Anuncio = ({ route, navigation }) => {
 
-
+  const [visible, setVisible] = useState(false);
+  const [mensagem, setMensagem] = useState("");
   const { itemId } = route.params;
   const [anuncio, setAnuncio] = useState({
     anoFabricacao: 0,
@@ -20,8 +22,6 @@ const Anuncio = ({ route, navigation }) => {
   });
 
   useEffect(() => {
-
-
     api(`anuncios/${itemId}`)
       .then(res => {
         setAnuncio(res.data[0])
@@ -38,62 +38,37 @@ const Anuncio = ({ route, navigation }) => {
     })
   }
 
-
-
-
-
   const criarChatRoom = async () => {
-
-    let tkn;
-    getToken()
-      .then(res => {
-        tkn = res
-
-      })
-      .catch(e => {
-        console.log("Erro ao coletar o token")
-      })
-
     try {
-      let res = await api.get(`chatrooms/userid`)
-      let lista = res.data
-      let found = lista.find(item => (item.anuncioId._id === itemId))
-      if (found) {
-        navigation.navigate("Chat Room", {
-          chatRoomId: found._id,
-          token: tkn
-        })
-      } else {
+      let tkn = await getToken()
+      if (tkn) {
         let dados = {
           anuncioId: itemId,
           nomeChatRoom: `${anuncio.veiculoMarca} ${anuncio.descricaoVeiculo} - ${anuncio.anoModelo}`
         }
         let chatRoom = await api.post(`chatrooms`, dados)
-        console.log(chatRoom)
-        console.log(tkn)
         navigation.navigate("Chat Room", {
-          chatRoomId: chatRoom.chatRoomId,
+          chatRoomId: chatRoom.data.chatRoomId,
           token: tkn
         })
-        // api.post(`chatrooms`, dados)
-        //   .then(res => {
-        //     navigation.navigate("Chat Room", {
-        //       chatRoomId: res.data.chatRoomId,
-        //       token: tkn
-        //     })
-        //   })
-        //   .catch(e => {
-        //     console.log(e.response.data)
-        //   })
+      } else {
+        setMensagem("Você não está logado")
+        setVisible(true)
       }
     } catch (e) {
-      return console.log("O usuário não está logado")
+      setMensagem(e.response.data.message)
+      return setVisible(true)
     }
   }
 
+  const reset = () => {
+    setVisible(false);
+    setMensagem("")
+  }
 
   return (
     <SafeAreaView style={styles.container}>
+      <Alerta mensagem={mensagem} visible={visible} reset={reset} navigation={navigation} />
       <ScrollView>
         <TouchableOpacity onPress={() => { visualizar() }}>
           <Image
@@ -139,10 +114,7 @@ const Anuncio = ({ route, navigation }) => {
             <Text style={styles.textDetalhe}>Valor do veículo</Text>
             <Text style={styles.text}>
               {
-                Intl.NumberFormat("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                }).format(anuncio.veiculoValor)
+                "R$ " + numeral(anuncio.veiculoValor).format()
               }
             </Text>
           </View>

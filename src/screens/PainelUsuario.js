@@ -53,14 +53,14 @@ const PainelUsuario = ({ route, navigation }) => {
       .catch(() => {
         console.log("Acesso negado ao recuperar dados do usuário")
       })
-  }, [isFocused])
+  }, [isFocused === true])
 
   const excluir = async () => {
     await api.delete(`users/userid`)
       .then(res => {
         clearToken()
         resetParams()
-        navigation.navigate('Only Motors', {
+        navigation.navigate('Home', {
           mensagem: res.data.message,
           visibilidade: true
         });

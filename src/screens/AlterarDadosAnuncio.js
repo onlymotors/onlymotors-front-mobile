@@ -1,36 +1,10 @@
-import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import api from '../services/api';
-import numeral from 'numeral';
-
-numeral.register('locale', 'pt', {
-  delimiters: {
-    thousands: '.',
-    decimal: ','
-  },
-  abbreviations: {
-    thousand: 'mil',
-    million: 'mi',
-    billion: 'bi',
-    trillion: 'tri'
-  },
-  ordinal: function (number) {
-    return '.º';
-  },
-  currency: {
-    symbol: 'R$'
-  }
-});
-
-numeral.locale('pt');
+import numeral from '../services/formatador';
 
 const AlterarDadosAnuncio = ({ navigation, route }) => {
-  const isFocused = useIsFocused();
-
-  const [showDropDown, setShowDropDown] = useState(false);
-  const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
 
   const { itemId } = route.params;
 
@@ -85,7 +59,6 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
   const mascararValor = (value) => {
     var number = numeral(value).format();
     number = "R$ " + number
-    console.log(number)
     setVeiculoValor(number);
   };
 

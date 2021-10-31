@@ -1,15 +1,15 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, SafeAreaView } from 'react-native';
-import { List } from 'react-native-paper';
-import api, { API_URL } from '../services/api';
+import { StyleSheet, SafeAreaView } from 'react-native';
+import api from '../services/api';
 import Alerta from '../components/Alerta';
+import Resultados from '../components/Resultados';
 
 const Home = ({ route, navigation }) => {
 
   const [anuncios, setAnuncios] = useState();
   const [contadorPagina, setContadorPagina] = useState(20)
-  const [numAnuncios, setNumAnuncios] = useState();
+  const [numAnuncios, setNumAnuncios] = useState(0);
   const isFocused = useIsFocused();
   const { mensagem } = route.params;
   const { visibilidade } = route.params;
@@ -27,22 +27,7 @@ const Home = ({ route, navigation }) => {
       .catch(e => {
         console.log("Erro ao coletar anuncios")
       })
-  }, [isFocused])
-
-
-  const trocarPagina = async () => {
-    if (anuncios.length < numAnuncios) {
-      await api("anuncios")
-        .then(r => {
-          const slice = r.data.anuncio.slice(0, contadorPagina);
-          setContadorPagina(contadorPagina + 10)
-          setAnuncios(slice)
-        })
-        .catch(e => {
-          console.log("Erro ao coletar anuncios")
-        })
-    }
-  }
+  }, [isFocused === true])
 
   const resetParams = () => {
     navigation.setParams({
@@ -61,56 +46,15 @@ const Home = ({ route, navigation }) => {
   return (
     <SafeAreaView>
       <Alerta mensagem={mensagem} visible={visible} reset={reset} navigation={navigation} />
-      <FlatList
-        data={anuncios}
-        onEndReachedThreshold={1}
-        onEndReached={trocarPagina}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Text style={styles.headerTitulo}>Novos e Usados</Text>
-            <Text style={styles.headerSubTitulo}>{numAnuncios} anúncios encontrados</Text>
-          </View>
-        }
-        keyExtractor={item => item._id.toString()}
-        removeClippedSubviews={true}
-        renderItem={({ item }) => (
-          <List.Item
-            title={
-              <Text style={styles.listTitulo}>
-                {item.veiculoMarca} {item.descricaoVeiculo}
-              </Text>
-            }
-            description={
-              <View>
-                <Text>{item.anoModelo}</Text>
-                <Text style={styles.listPreco}>
-                  {
-                    Intl.NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    }).format(item.veiculoValor)
-                  }
-                </Text>
-              </View>
-            }
-            descriptionNumberOfLines={2}
-            onPress={() => {
-              resetParams()
-              navigation.navigate('Anúncio', {
-                itemId: item._id,
-              });
-            }}
-            left={() =>
-              <Image
-                style={styles.tinyLogo}
-                source={{
-                  uri: `${(item.urlImage) ? item.urlImage : API_URL + "images/sem_foto.png"}`
-                }}
-              />
-            }
-          />
-        )
-        }
+      <Resultados
+        route={route}
+        navigation={navigation}
+        anuncios={anuncios}
+        setAnuncios={setAnuncios}
+        numAnuncios={numAnuncios}
+        contadorPagina={contadorPagina}
+        setContadorPagina={setContadorPagina}
+        isHeader={true}
       />
     </SafeAreaView>
   );

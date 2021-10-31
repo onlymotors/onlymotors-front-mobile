@@ -57,7 +57,7 @@ const AlterarDados = ({ navigation, route }) => {
       .catch(e => {
         console.log("Erro ao coletar usuário")
       })
-  }, [isFocused])
+  }, [isFocused === true])
 
   useEffect(() => {
     if (isLoading) {

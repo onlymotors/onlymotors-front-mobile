@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Appbar } from "react-native-paper";
 
-
 function StackBar({ navigation, back, route }) {
-
 
   return (
     <Appbar.Header>

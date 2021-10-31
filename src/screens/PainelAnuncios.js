@@ -2,12 +2,12 @@ import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Button, List, Snackbar } from 'react-native-paper';
-import Alerta from '../components/Alerta';
 import MenuContexto from '../components/MenuContexto';
 import api, { API_URL } from '../services/api';
 import * as DocumentPicker from 'expo-document-picker';
 import ProgressoUpload from '../components/ProgressoUpload';
 import MenuFoto from '../components/MenuFoto';
+import numeral from '../services/formatador';
 
 const PainelAnuncios = ({ navigation, route }) => {
 
@@ -16,7 +16,7 @@ const PainelAnuncios = ({ navigation, route }) => {
   const [renderizar, setRenderizar] = useState(0);
   const [anuncios, setAnuncios] = useState();
   const [contadorPagina, setContadorPagina] = useState(20)
-  const [numAnuncios, setNumAnuncios] = useState();
+  const [numAnuncios, setNumAnuncios] = useState(0);
   const isFocused = useIsFocused();
 
   const { mensagem } = route.params;
@@ -33,9 +33,9 @@ const PainelAnuncios = ({ navigation, route }) => {
 
   const [imagem, setImagem] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(false)
-  }, [isFocused])
+  // useEffect(() => {
+  //   setIsLoading(false)
+  // }, [isFocused === true])
 
   const abrirMenuFoto = (item) => {
     setAnuncioId(item._id)
@@ -99,6 +99,7 @@ const PainelAnuncios = ({ navigation, route }) => {
   }
 
   useEffect(() => {
+    console.log("PAINEL DE ANUNCIOS")
     setIsLoading(false)
     api('anuncios/userid')
       .then(res => {
@@ -110,7 +111,7 @@ const PainelAnuncios = ({ navigation, route }) => {
       .catch(e => {
         console.log("Erro ao coletar anúncios do usuário")
       })
-  }, [isFocused])
+  }, [isFocused === true])
 
   useEffect(() => {
     api('anuncios/userid')
@@ -258,7 +259,7 @@ const PainelAnuncios = ({ navigation, route }) => {
               <>
                 <View><Text style={styles.listTitulo}>{item.veiculoMarca} {item.descricaoVeiculo} - {item.anoModelo}</Text></View>
                 <View><Text>Visitas: <Text style={styles.numeroNegrito}>{item.numVisitas}</Text>   Contatos: <Text style={styles.numeroNegrito}>{item.numContatos}</Text></Text></View>
-                <View><Text style={styles.listPreco}>{Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", }).format(item.veiculoValor)}</Text></View>
+                <View><Text style={styles.listPreco}>{"R$ " + numeral(item.veiculoValor).format()}</Text></View>
 
               </>
 

@@ -15,13 +15,13 @@ const ProgressoUpload = (props) => {
     if (props.httpMethod === "post") {
       api.post(props.apiUrl, data)
         .then(res => {
-          props.navigation.navigate('Only Motors', {
+          props.navigation.navigate('Home', {
             mensagem: res.data.message,
             visibilidade: true
           });
         })
         .catch(e => {
-          props.navigation.navigate('Only Motors', {
+          props.navigation.navigate('Home', {
             mensagem: e.message,
             visibilidade: true
           });
