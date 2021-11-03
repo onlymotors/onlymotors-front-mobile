@@ -29,6 +29,24 @@ const Home = ({ route, navigation }) => {
       })
   }, [isFocused === true])
 
+  const trocarPagina = async () => {
+    if (anuncios.length < numAnuncios) {
+      await api("anuncios")
+        .then(r => {
+          const slice = r.data.anuncio.slice(0, contadorPagina);
+          setContadorPagina(contadorPagina + 10)
+          setAnuncios(slice)
+        })
+        .catch(e => {
+          console.log("Erro ao coletar anuncios")
+        })
+    }
+  }
+
+  const executarTrocarPagina = () => {
+    trocarPagina()
+  }
+
   const resetParams = () => {
     navigation.setParams({
       mensagem:
@@ -50,10 +68,8 @@ const Home = ({ route, navigation }) => {
         route={route}
         navigation={navigation}
         anuncios={anuncios}
-        setAnuncios={setAnuncios}
         numAnuncios={numAnuncios}
-        contadorPagina={contadorPagina}
-        setContadorPagina={setContadorPagina}
+        trocarPagina={executarTrocarPagina}
         isHeader={true}
       />
     </SafeAreaView>

@@ -6,21 +6,6 @@ import numeral from '../services/formatador';
 
 const Resultados = (props) => {
 
-  const trocarPagina = async () => {
-    // console(anuncios.length)
-    if (props.anuncios.length < props.numAnuncios) {
-      await api("anuncios")
-        .then(r => {
-          const slice = r.data.anuncio.slice(0, props.contadorPagina);
-          props.setContadorPagina(props.contadorPagina + 10)
-          props.setAnuncios(slice)
-        })
-        .catch(e => {
-          console.log("Erro ao coletar anuncios")
-        })
-    }
-  }
-
   return (
     // <SafeAreaView>
     <FlatList
@@ -28,7 +13,7 @@ const Resultados = (props) => {
       // contentContainerStyle={{paddingBottom:20}}
       data={props.anuncios}
       onEndReachedThreshold={1}
-      onEndReached={trocarPagina}
+      onEndReached={props.trocarPagina}
       ListHeaderComponent={props.isHeader &&
         <View style={styles.header}>
           <Text style={styles.headerTitulo}>Novos e Usados</Text>
