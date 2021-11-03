@@ -99,7 +99,6 @@ const PainelAnuncios = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    console.log("PAINEL DE ANUNCIOS")
     setIsLoading(false)
     api('anuncios/userid')
       .then(res => {

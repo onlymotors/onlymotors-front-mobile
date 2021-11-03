@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Image, Text, StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import api, { API_URL } from '../services/api';
-import Alerta from '../components/Alerta';
-import { Button, TextInput, List } from 'react-native-paper';
-import { setToken } from '../services/tokenService';
+import { List } from 'react-native-paper';
+import { getToken } from '../services/tokenService';
 import { useIsFocused } from '@react-navigation/core';
 
 const Chat = ({ navigation, route }) => {
 
   const [chatRooms, setChatRooms] = useState([]);
   const [contadorPagina, setContadorPagina] = useState(20)
-  const [numRooms, setNumRooms] = useState();
-
+  const [numRooms, setNumRooms] = useState(0);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -21,12 +19,11 @@ const Chat = ({ navigation, route }) => {
         setNumRooms(res.data.length)
         setContadorPagina(contadorPagina + 10)
         setChatRooms(slice)
-        console.log(slice)
       })
       .catch(e => {
         console.log("Erro ao coletar salas de chats")
       })
-  }, [isFocused])
+  }, [isFocused === true])
 
   const trocarPagina = async () => {
     if (chatRooms.length < numRooms) {
@@ -35,7 +32,6 @@ const Chat = ({ navigation, route }) => {
           const slice = r.data.slice(0, contadorPagina);
           setContadorPagina(contadorPagina + 10)
           setChatRooms(slice)
-          console.log(slice)
         })
         .catch(e => {
           console.log("Erro ao coletar salas de chats")
@@ -43,17 +39,23 @@ const Chat = ({ navigation, route }) => {
     }
   }
 
+  const entrarChatRoom = (id) => {
+    let tkn;
+    getToken()
+      .then(res => {
+        tkn = res
+        navigation.navigate("Chat Room", {
+          chatRoomId: id,
+          token: tkn
+        })
+      })
+      .catch(e => {
+        console.log("Erro ao coletar o token")
+      })
+  }
+
   return (
     <SafeAreaView>
-      {/* {chatRooms.map(item =>
-        <View key={item._id}>
-
-          <Text>{(item.anuncioId.urlImage) ? item.anuncioId.urlImage : API_URL + "images/sem_foto.png"}</Text>
-          <Text>{item.nomeChatRoom}</Text>
-          <Text>{(item.mensagens.length) ? item.mensagens[0].mensagem + " - " + item.mensagens[0].mensagemData : ""}</Text>
-        </View>
-      )} */}
-
       <FlatList
         data={chatRooms}
         onEndReachedThreshold={1}
@@ -61,9 +63,14 @@ const Chat = ({ navigation, route }) => {
         extraData={chatRooms}
         keyExtractor={item => item._id.toString()}
         removeClippedSubviews={true}
-        // ListHeaderComponent={}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <Text style={styles.headerTitulo}>Chat</Text>
+          </View>
+        }
         renderItem={({ item }) => (
           <List.Item
+            onPress={() => { entrarChatRoom(item._id) }}
             left={() =>
               <Image
                 style={styles.tinyLogo}
@@ -72,9 +79,13 @@ const Chat = ({ navigation, route }) => {
                 }}
               />
             }
-            // right={ }
-            title={<Text>{item.nomeChatRoom}</Text>}
-            description={<Text>{(item.mensagens.length) ? item.mensagens[0].mensagem + " - " + item.mensagens[0].mensagemData : ""}</Text>}
+            title={<View style={styles.descricao}><Text style={styles.titulo}>{item.nomeChatRoom}</Text></View>}
+            description={
+              <>
+                <Text style={styles.textoDescricaoHeader}>{(item.mensagens.length) ? item.mensagens[0].nomeUser + " - " + item.mensagens[0].mensagemData + "\n" : ""}</Text>
+                <Text style={styles.textoDescricao}>{(item.mensagens.length) ? item.mensagens[0].mensagem : ""}</Text>
+              </>
+            }
             descriptionNumberOfLines={5}
           />
         )}
@@ -88,6 +99,29 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
   },
+  titulo: {
+    fontSize: 18,
+    fontWeight: "600"
+  },
+  header: {
+    padding: 15,
+    alignSelf: "center"
+  },
+  headerTitulo: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "700"
+  },
+  descricao: {
+    paddingBottom: 15
+  },
+  textoDescricaoHeader: {
+    fontSize: 12,
+    fontWeight: "bold"
+  },
+  textoDescricao: {
+    fontSize: 12,
+  }
 })
 
 
