@@ -3,19 +3,19 @@ import { getToken } from './tokenService';
 import { API_URL } from '../services/api';
 
 let socket;
-let token;
-getToken()
-  .then(res => {
-    token = res
-  })
-  .catch(e => {
-  })
+// let token;
+// getToken()
+//   .then(res => {
+//     token = res
+//   })
+//   .catch(e => {
+//   })
+// console.log(token)
 
-export const initiateSocket = (room) => {
-
+export const initiateSocket = (room, token) => {
   socket = io(`${API_URL}chat`, {
-    extraHeaders: { "Authorization": `Bearer ${token}` },
-    // transports: ['websocket'],
+    query: { token: `Bearer ${token}` },
+    transports: ['websocket'],
     jsonp: false
   });
   console.log(`Connecting socket...`);
