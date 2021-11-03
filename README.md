@@ -40,12 +40,12 @@ $ npm install --global expo-cli
 <ul>
 <li><b>Criação das Variáveis</b></li>
 <ul>
-<li>Crie um arquivo <b>.env</b> e configure o endereço do Back-End:
+<li>Configure o endereço do Back-End na linha 4 do arquivo <b>./src/services/api.js</b>:
 <br/>
 
 
 ```bash
-API_URL='endereco_do_back_end'
+export const API_URL = 'endereco_do_back_end'
 ```
 
 <b>Obs:</b> Se ambas as aplicações forem executadas na mesma rede, o endereço do Back-End deve ser o IP do computador naquela rede.
