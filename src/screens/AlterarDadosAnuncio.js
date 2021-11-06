@@ -32,14 +32,15 @@ const AlterarDadosAnuncio = ({ navigation, route }) => {
   }, [navigation, itemId])
 
   const salvar = async () => {
-    let valor = Number(veiculoMarca.replace(".", "").replace(",", ".").replace(/[^\d.-]/g, ""))
+    let valor = Number(veiculoValor.replace(".", "").replace(",", ".").replace(/[^\d.-]/g, ""))
+    console.log(valor)
     let dados = {
       anoFabricacao: parseInt(anoFabricacao),
       anoModelo: parseInt(anoModelo),
       descricaoVeiculo,
       nomeFabricante,
-      veiculoMarca: valor,
-      veiculoValor,
+      veiculoMarca,
+      veiculoValor: valor,
     }
     await api.patch(`anuncios/${itemId}`, dados)
       .then(res => {
