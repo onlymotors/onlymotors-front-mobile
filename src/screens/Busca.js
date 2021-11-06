@@ -255,6 +255,7 @@ const Busca = ({ navigation, back, route }) => {
                   Keyboard.dismiss();
                 }}
                 onSubmitEditing={() => {
+                  setBuscador("buscarPalavras")
                   setVisible(false);
                   // setShowResultados(true);
                   setShowAfterSearch(true);
@@ -310,6 +311,7 @@ const Busca = ({ navigation, back, route }) => {
           <ScrollView keyboardShouldPersistTaps="handled" style={styles.queryPossiveis}>
             {visible && possiveisResultados.map(item =>
               <TouchableOpacity key={geradorRandomico(10)} onPress={() => {
+                setBuscador("buscarSugerido")
                 setSugerido(item)
                 setSearchQuery(item);
                 setVisible(false);
@@ -444,6 +446,7 @@ const Busca = ({ navigation, back, route }) => {
               style={styles.botao}
               labelStyle={styles.botaoLabel}
               onPress={() => {
+                setBuscador("buscarFiltros")
                 setShowFiltro(false);
                 setShowResultados(true);
                 setShowAfterSearch(true);
