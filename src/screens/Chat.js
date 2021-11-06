@@ -69,13 +69,14 @@ const Chat = ({ navigation, route }) => {
           </View>
         }
         renderItem={({ item }) => (
+          item.anuncioId &&
           <List.Item
             onPress={() => { entrarChatRoom(item._id) }}
             left={() =>
               <Image
                 style={styles.tinyLogo}
                 source={{
-                  uri: `${(item.anuncioId.urlImage) ? item.anuncioId.urlImage : API_URL + "images/sem_foto.png"}`
+                  uri: `${(item.anuncioId && item.anuncioId.urlImage) ? item.anuncioId.urlImage : API_URL + "images/sem_foto.png"}`
                 }}
               />
             }
