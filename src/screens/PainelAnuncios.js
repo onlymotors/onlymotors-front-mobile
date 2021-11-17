@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, SafeAreaView, TouchableOpacity, Linking, Alert } from 'react-native';
 import { Button, List, Snackbar } from 'react-native-paper';
 import MenuContexto from '../components/MenuContexto';
 import api, { API_URL } from '../services/api';
@@ -8,6 +8,9 @@ import * as DocumentPicker from 'expo-document-picker';
 import ProgressoUpload from '../components/ProgressoUpload';
 import MenuFoto from '../components/MenuFoto';
 import numeral from '../services/formatador';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+import { getToken } from '../services/tokenService';
 
 const PainelAnuncios = ({ navigation, route }) => {
 
@@ -100,12 +103,11 @@ const PainelAnuncios = ({ navigation, route }) => {
 
   useEffect(() => {
     setIsLoading(false)
-    api('anuncios/userid')
+    api(`anuncios/userid?pular=0&limitar=20&contar=true`)
       .then(res => {
-        const slice = res.data.anuncio.slice(0, contadorPagina);
-        setNumAnuncios(res.data.anuncio.length)
+        setNumAnuncios(res.data.numAnuncios)
         setContadorPagina(contadorPagina + 10)
-        setAnuncios(slice)
+        setAnuncios(res.data.anuncio)
       })
       .catch(e => {
         console.log("Erro ao coletar anúncios do usuário")
@@ -113,12 +115,11 @@ const PainelAnuncios = ({ navigation, route }) => {
   }, [isFocused === true])
 
   useEffect(() => {
-    api('anuncios/userid')
+    api(`anuncios/userid?pular=0&limitar=20&contar=true`)
       .then(res => {
-        const slice = res.data.anuncio.slice(0, contadorPagina);
-        setNumAnuncios(res.data.anuncio.length)
+        setNumAnuncios(res.data.numAnuncios)
         setContadorPagina(30)
-        setAnuncios(slice)
+        setAnuncios(res.data.anuncio)
       })
       .catch(e => {
         console.log("Erro ao coletar anúncios do usuário")
@@ -131,15 +132,49 @@ const PainelAnuncios = ({ navigation, route }) => {
 
   const trocarPagina = async () => {
     if (anuncios.length < numAnuncios) {
-      await api("anuncios/userid")
-        .then(r => {
-          const slice = r.data.anuncio.slice(0, contadorPagina);
+      await api(`anuncios/userid?pular=0&limitar=${contadorPagina}`)
+        .then(res => {
           setContadorPagina(contadorPagina + 10)
-          setAnuncios(slice)
+          setAnuncios(res.data.anuncio)
         })
         .catch(e => {
           console.log("Erro ao coletar anúncios do usuário")
         })
+    }
+  }
+
+  const relatorio = async () => {
+    let url = "http://192.168.18.5:3333/relatorio/download";
+
+    const fileUri = FileSystem.documentDirectory + 'relatorio.xlsx';
+
+    let token = await getToken()
+    console.log(token)
+
+    const downloadedFile = await FileSystem.downloadAsync(url, fileUri,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    if (status === "granted") {
+      try {
+        const asset = await MediaLibrary.createAssetAsync(downloadedFile.uri);
+        const album = await MediaLibrary.getAlbumAsync('Download');
+        if (album == null) {
+          await MediaLibrary.createAlbumAsync('Download', asset, false);
+        } else {
+          await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+        }
+        alert("Success, file was successfully downloaded!");
+
+      } catch (err) {
+        console.log("Save err: ", err)
+      }
+
     }
   }
 
@@ -212,7 +247,8 @@ const PainelAnuncios = ({ navigation, route }) => {
                 mode="contained"
                 color="#FF7D04"
                 labelStyle={{ color: "white", fontSize: 12 }}
-                onPress={() => { }}
+                onPress={() => { navigation.navigate("Relatório") }}
+                // onPress={() => { relatorio() }}
                 style={styles.botao}
               >
                 Gerar Relatório

@@ -7,7 +7,7 @@ import Resultados from '../components/Resultados';
 
 const Home = ({ route, navigation }) => {
 
-  const [anuncios, setAnuncios] = useState();
+  const [anuncios, setAnuncios] = useState([]);
   const [contadorPagina, setContadorPagina] = useState(20)
   const [numAnuncios, setNumAnuncios] = useState(0);
   const isFocused = useIsFocused();
@@ -17,12 +17,11 @@ const Home = ({ route, navigation }) => {
 
   useEffect(() => {
     setVisible(visibilidade)
-    api('anuncios')
+    api(`anuncios?pular=0&limitar=20&contar=true`)
       .then(res => {
-        const slice = res.data.anuncio.slice(0, contadorPagina);
-        setNumAnuncios(res.data.anuncio.length)
-        setContadorPagina(contadorPagina + 10)
-        setAnuncios(slice)
+        setNumAnuncios(res.data.numAnuncios)
+        setContadorPagina(contadorPagina + 20)
+        setAnuncios(res.data.anuncio)
       })
       .catch(e => {
         console.log("Erro ao coletar anuncios")
@@ -31,11 +30,10 @@ const Home = ({ route, navigation }) => {
 
   const trocarPagina = async () => {
     if (anuncios.length < numAnuncios) {
-      await api("anuncios")
+      await api(`anuncios?pular=0&limitar=${contadorPagina}`)
         .then(r => {
-          const slice = r.data.anuncio.slice(0, contadorPagina);
-          setContadorPagina(contadorPagina + 10)
-          setAnuncios(slice)
+          setContadorPagina(contadorPagina + 20)
+          setAnuncios(r.data.anuncio)
         })
         .catch(e => {
           console.log("Erro ao coletar anuncios")

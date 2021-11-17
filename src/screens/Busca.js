@@ -10,7 +10,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 const Busca = ({ navigation, back, route }) => {
 
-  let contadorPagina = 20;
+  // let contadorPagina = 20;
+  // let contar = "true";
   const searchInput = useRef();
   const [visible, setVisible] = useState(true);
   const [showSearchQuery, setShowSearchQuery] = useState(true);
@@ -37,7 +38,8 @@ const Busca = ({ navigation, back, route }) => {
   const onChangeSearch = query => setSearchQuery(query);
 
   const [anuncios, setAnuncios] = useState();
-  // const [contadorPagina, setContadorPagina] = useState(20)
+  const [contadorPagina, setContadorPagina] = useState(20)
+  const [contar, setContar] = useState("true")
   const [numAnuncios, setNumAnuncios] = useState(0);
   const [buscador, setBuscador] = useState("");
   const [sugerido, setSugerido] = useState("");
@@ -135,24 +137,26 @@ const Busca = ({ navigation, back, route }) => {
       }
     }
     if (searchQuery !== "") {
-      await api.get(`search/${searchQuery}`)
+      await api.get(`search/${searchQuery}?pular=0&limitar=${contadorPagina}&contar=${contar}`)
         .then(res => {
-          const slice = res.data.anuncio.slice(0, contadorPagina);
-          setNumAnuncios(res.data.anuncio.length)
-          contadorPagina = contadorPagina + 10
-          setAnuncios(slice)
+          if (res.data.numAnuncios)
+            setNumAnuncios(res.data.numAnuncios)
+          setContadorPagina(contadorPagina + 20);
+          setContar("false");
+          setAnuncios(res.data.anuncio)
           setBuscador("buscarPalavras")
         })
         .catch(e => {
           console.log("Erro ao coletar anuncios")
         })
     } else {
-      await api.get(`anuncios`)
+      await api.get(`anuncios?pular=0&limitar=${contadorPagina}&contar=${contar}`)
         .then(res => {
-          const slice = res.data.anuncio.slice(0, contadorPagina);
-          setNumAnuncios(res.data.anuncio.length)
-          contadorPagina = contadorPagina + 10
-          setAnuncios(slice)
+          if (res.data.numAnuncios)
+            setNumAnuncios(res.data.numAnuncios)
+          setContadorPagina(contadorPagina + 20);
+          setContar("false");
+          setAnuncios(res.data.anuncio)
           setBuscador("buscarPalavras")
         })
         .catch(e => {
@@ -179,12 +183,13 @@ const Busca = ({ navigation, back, route }) => {
     if (valorMaximo === "") {
       valMaximo = "0"
     }
-    await api.get(`search?palavras=${searchQuery}&marca=${marcaVeiculo}&modelo=${modeloVeiculo}&ano=${anoVeiculo}&valorMinimo=${valMinimo}&valorMaximo=${valMaximo}`)
+    await api.get(`search?palavras=${searchQuery}&marca=${marcaVeiculo}&modelo=${modeloVeiculo}&ano=${anoVeiculo}&valorMinimo=${valMinimo}&valorMaximo=${valMaximo}&pular=0&limitar=${contadorPagina}&contar=${contar}`)
       .then(res => {
-        const slice = res.data.anuncio.slice(0, contadorPagina);
-        setNumAnuncios(res.data.anuncio.length)
-        contadorPagina = contadorPagina + 10
-        setAnuncios(slice)
+        if (res.data.numAnuncios)
+          setNumAnuncios(res.data.numAnuncios)
+        setContadorPagina(contadorPagina + 20)
+        setContar("false")
+        setAnuncios(res.data.anuncio)
         setBuscador("buscarFiltros")
       })
       .catch(e => {
@@ -200,12 +205,13 @@ const Busca = ({ navigation, back, route }) => {
     } else {
       setMarca(itemSplit[0])
     }
-    await api.get(`search/${item}`)
+    await api.get(`search/${item}?pular=0&limitar=${contadorPagina}&contar=${contar}`)
       .then(res => {
-        const slice = res.data.anuncio.slice(0, contadorPagina);
-        setNumAnuncios(res.data.anuncio.length)
-        contadorPagina = contadorPagina + 10
-        setAnuncios(slice)
+        if (res.data.numAnuncios)
+          setNumAnuncios(res.data.numAnuncios)
+        setContadorPagina(contadorPagina + 20);
+        setContar("false");
+        setAnuncios(res.data.anuncio)
         setBuscador("buscarSugerido")
       })
       .catch(e => {
@@ -227,6 +233,11 @@ const Busca = ({ navigation, back, route }) => {
     else
       buscarSugerido(sugerido)
   }
+
+
+  useEffect(() => {
+    selecionadorBuscador()
+  }, [contar === "true"])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -259,8 +270,9 @@ const Busca = ({ navigation, back, route }) => {
                   setVisible(false);
                   // setShowResultados(true);
                   setShowAfterSearch(true);
-                  contadorPagina = 20
-                  buscarPalavras();
+                  setContadorPagina(20);
+                  setContar("true");
+                  // buscarPalavras();
                 }}
               // onTouchEnd={() => {
               //   setVisible(false);
@@ -317,8 +329,9 @@ const Busca = ({ navigation, back, route }) => {
                 setVisible(false);
                 setShowResultados(true);
                 setShowAfterSearch(true);
-                contadorPagina = 20;
-                buscarSugerido(item);
+                setContadorPagina(20);
+                setContar("true");
+                // buscarSugerido(item);
                 Keyboard.dismiss();
 
               }} >
@@ -452,8 +465,9 @@ const Busca = ({ navigation, back, route }) => {
                 setShowAfterSearch(true);
                 setShowSearchQuery(true);
                 setSearchQuery("");
-                contadorPagina = 20;
-                buscarFiltros();
+                setContadorPagina(20);
+                setContar("true");
+                // buscarFiltros();
               }}
             >
               Filtrar
