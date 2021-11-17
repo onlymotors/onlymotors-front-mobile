@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import api from '../services/api';
+import api, { API_URL } from '../services/api';
 import { ActivityIndicator, Appbar, Button } from 'react-native-paper';
 import { getToken } from '../services/tokenService';
 import Alerta from '../components/Alerta';
@@ -47,7 +47,7 @@ const Relatorio = ({ route, navigation }) => {
   }
 
   const exportarExcel = async () => {
-    let url = "http://192.168.18.5:3333/relatorio/download";
+    let url = `${API_URL}relatorio/download`;
 
     const fileUri = FileSystem.documentDirectory + 'relatorio.xlsx';
 
