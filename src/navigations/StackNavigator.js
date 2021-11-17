@@ -13,6 +13,7 @@ import AlterarDadosAnuncio from '../screens/AlterarDadosAnuncio';
 import Visualizador from '../screens/Visualizador';
 import Chat from '../screens/Chat';
 import ChatRoom from '../screens/ChatRoom';
+import Relatorio from '../screens/Relatorio';
 import StackBar from "../components/StackBar";
 
 const Stack = createStackNavigator();
@@ -39,6 +40,7 @@ const StackNavigator = () => {
       <Stack.Screen name="Painel do Usuário" component={PainelUsuario} initialParams={{ title: "Painel do Usuário", mensagem: "", visibilidade: false }} />
       <Stack.Screen name="Alterar Dados do Anúncio" component={AlterarDadosAnuncio} initialParams={{ title: "Alterar Dados do Anúncio" }} />
       <Stack.Screen name="Visualizador" component={Visualizador} initialParams={{ title: "Visualizador", imagem: "" }} />
+      <Stack.Screen name="Relatório" component={Relatorio} options={{ headerMode: "float", headerShown: false }} initialParams={{ title: "Relatório" }} />
     </Stack.Navigator>
   );
 }
