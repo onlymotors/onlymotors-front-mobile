@@ -170,7 +170,7 @@ const Busca = ({ navigation, back, route }) => {
     if (marca === "Marca")
       marcaVeiculo = ""
     let modeloVeiculo = modelo
-    if (marca === "Marca")
+    if (modelo === "Modelo")
       modeloVeiculo = ""
     let anoVeiculo = ano
     if (ano === "Ano")
