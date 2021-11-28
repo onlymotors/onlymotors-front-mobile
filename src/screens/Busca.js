@@ -39,12 +39,14 @@ const Busca = ({ navigation, back, route }) => {
 
   const [anuncios, setAnuncios] = useState();
   const [contadorPagina, setContadorPagina] = useState(20)
-  const [contar, setContar] = useState("true")
-  const [numAnuncios, setNumAnuncios] = useState(0);
+  const [contar, setContar] = useState("")
+  // const [numAnuncios, setNumAnuncios] = useState(0);
   const [buscador, setBuscador] = useState("");
   const [sugerido, setSugerido] = useState("");
 
   useEffect(() => {
+
+    setContar("true")
 
     let lista = [{ label: "Ano", value: "Ano" }]
     for (let index = 2022; index >= 1901; index--) {
@@ -139,8 +141,8 @@ const Busca = ({ navigation, back, route }) => {
     if (searchQuery !== "") {
       await api.get(`search/${searchQuery}?pular=0&limitar=${contadorPagina}&contar=${contar}`)
         .then(res => {
-          if (res.data.numAnuncios)
-            setNumAnuncios(res.data.numAnuncios)
+          // if (res.data.numAnuncios)
+          //   setNumAnuncios(res.data.numAnuncios)
           setContadorPagina(contadorPagina + 20);
           setContar("false");
           setAnuncios(res.data.anuncio)
@@ -152,8 +154,8 @@ const Busca = ({ navigation, back, route }) => {
     } else {
       await api.get(`anuncios?pular=0&limitar=${contadorPagina}&contar=${contar}`)
         .then(res => {
-          if (res.data.numAnuncios)
-            setNumAnuncios(res.data.numAnuncios)
+          // if (res.data.numAnuncios)
+          //   setNumAnuncios(res.data.numAnuncios)
           setContadorPagina(contadorPagina + 20);
           setContar("false");
           setAnuncios(res.data.anuncio)
@@ -185,8 +187,8 @@ const Busca = ({ navigation, back, route }) => {
     }
     await api.get(`search?palavras=${searchQuery}&marca=${marcaVeiculo}&modelo=${modeloVeiculo}&ano=${anoVeiculo}&valorMinimo=${valMinimo}&valorMaximo=${valMaximo}&pular=0&limitar=${contadorPagina}&contar=${contar}`)
       .then(res => {
-        if (res.data.numAnuncios)
-          setNumAnuncios(res.data.numAnuncios)
+        // if (res.data.numAnuncios)
+        //   setNumAnuncios(res.data.numAnuncios)
         setContadorPagina(contadorPagina + 20)
         setContar("false")
         setAnuncios(res.data.anuncio)
@@ -207,8 +209,8 @@ const Busca = ({ navigation, back, route }) => {
     }
     await api.get(`search/${item}?pular=0&limitar=${contadorPagina}&contar=${contar}`)
       .then(res => {
-        if (res.data.numAnuncios)
-          setNumAnuncios(res.data.numAnuncios)
+        // if (res.data.numAnuncios)
+        //   setNumAnuncios(res.data.numAnuncios)
         setContadorPagina(contadorPagina + 20);
         setContar("false");
         setAnuncios(res.data.anuncio)
@@ -226,12 +228,12 @@ const Busca = ({ navigation, back, route }) => {
   };
 
   const selecionadorBuscador = () => {
-    if (buscador === "buscarPalavras")
-      buscarPalavras()
+    if (buscador === "buscarSugerido")
+      buscarSugerido(sugerido)
     else if (buscador === "buscarFiltros")
       buscarFiltros()
     else
-      buscarSugerido(sugerido)
+      buscarPalavras()
   }
 
 
@@ -292,9 +294,9 @@ const Busca = ({ navigation, back, route }) => {
               <View
                 style={styles.afterSearchRow}
               >
-                <Text style={styles.textoAnuEncontrados}>
+                {/* <Text style={styles.textoAnuEncontrados}>
                   {numAnuncios} anúncios encontrados
-                </Text>
+                </Text> */}
                 <View style={styles.badge}>
                   <TouchableOpacity
                     onPress={() => {
@@ -482,7 +484,7 @@ const Busca = ({ navigation, back, route }) => {
             route={route}
             navigation={navigation}
             anuncios={anuncios}
-            numAnuncios={numAnuncios}
+            // numAnuncios={numAnuncios}
             trocarPagina={selecionadorBuscador}
             isHeader={false}
           />
@@ -597,7 +599,8 @@ const styles = StyleSheet.create({
   },
   afterSearchRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
+    justifyContent: "flex-end",
     borderTopColor: "#D5D5D5",
     borderTopWidth: 1,
     paddingTop: 8,

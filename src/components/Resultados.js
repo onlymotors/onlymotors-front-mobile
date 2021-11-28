@@ -17,7 +17,10 @@ const Resultados = (props) => {
       ListHeaderComponent={props.isHeader &&
         <View style={styles.header}>
           <Text style={styles.headerTitulo}>Novos e Usados</Text>
-          <Text style={styles.headerSubTitulo}>{props.numAnuncios} anúncios encontrados</Text>
+          {props.numAnuncios !== 0
+            ? <Text style={styles.headerSubTitulo}>{props.numAnuncios} anúncios publicados</Text>
+            : <Text style={styles.headerSubTitulo}></Text>
+          }
         </View>
       }
       keyExtractor={item => item._id.toString()}

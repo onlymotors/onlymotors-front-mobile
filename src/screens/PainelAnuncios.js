@@ -232,7 +232,7 @@ const PainelAnuncios = ({ navigation, route }) => {
         extraData={anuncios}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.headerTitulo}>{numAnuncios} anúncios encontrados</Text>
+            {/* <Text style={styles.headerTitulo}>{numAnuncios} anúncios encontrados</Text> */}
             <View style={styles.direcao}>
               <Button
                 mode="contained"
