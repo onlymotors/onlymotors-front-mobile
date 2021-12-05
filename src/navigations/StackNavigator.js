@@ -15,6 +15,8 @@ import Chat from '../screens/Chat';
 import ChatRoom from '../screens/ChatRoom';
 import Relatorio from '../screens/Relatorio';
 import StackBar from "../components/StackBar";
+import Termos from "../screens/Termos";
+import Privacidade from "../screens/Privacidade";
 
 const Stack = createStackNavigator();
 
@@ -41,6 +43,8 @@ const StackNavigator = () => {
       <Stack.Screen name="Alterar Dados do Anúncio" component={AlterarDadosAnuncio} initialParams={{ title: "Alterar Dados do Anúncio" }} />
       <Stack.Screen name="Visualizador" component={Visualizador} initialParams={{ title: "Visualizador", imagem: "" }} />
       <Stack.Screen name="Relatório" component={Relatorio} options={{ headerMode: "float", headerShown: false }} initialParams={{ title: "Relatório" }} />
+      <Stack.Screen name="Termos e Condições" component={Termos} initialParams={{ title: "Termos e Condições" }} />
+      <Stack.Screen name="Política de Privacidade" component={Privacidade} initialParams={{ title: "Política de Privacidade" }} />
     </Stack.Navigator>
   );
 }

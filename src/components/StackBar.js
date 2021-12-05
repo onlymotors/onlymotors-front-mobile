@@ -6,7 +6,7 @@ function StackBar({ navigation, back, route }) {
   return (
     <Appbar.Header>
       {/* <Appbar.Action icon="menu" onPress={() => { navigation.openDrawer() }} /> */}
-      {route.params.title === "Painel de Busca"
+      {route.params.title === "Painel de Busca" || route.params.title === "Termos e Condições" || route.params.title === "Política de Privacidade"
         ?
         <Appbar.BackAction color="white" onPress={navigation.goBack} />
         :
