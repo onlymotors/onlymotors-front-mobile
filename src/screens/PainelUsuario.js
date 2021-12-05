@@ -127,6 +127,7 @@ const PainelUsuario = ({ route, navigation }) => {
                 Cancelar
               </Button>
             </View>
+            <Text><Text style={{ fontWeight: "bold" }}>Obs: </Text>Os dados serão removidos completamente de nosso sistema em até 30 dias.</Text>
           </Modal>
         </Portal>
         <Text style={styles.textSecao}>Informações da conta</Text>
